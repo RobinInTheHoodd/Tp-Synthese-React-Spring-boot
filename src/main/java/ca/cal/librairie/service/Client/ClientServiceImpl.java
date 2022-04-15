@@ -23,9 +23,11 @@ import ca.cal.librairie.persistence.Users.ClientRepository;
 import ca.cal.librairie.persistence.Users.EmployeRepository;
 import ca.cal.librairie.persistence.Utils.BillRepository;
 import ca.cal.librairie.persistence.Utils.BorrowDocRepository;
+import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -72,7 +74,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<documentDto> getBooksDtoByFilter(SearchBar searchBar) {
+    public List<documentDto> getBooksDtoByFilter(@NotNull SearchBar searchBar) {
 
         List<documentDto> documentDtos;
 
@@ -225,8 +227,9 @@ public class ClientServiceImpl implements ClientService {
         return documentRepository.getDocsByGenreIsLike(editor).stream().map(document -> modelMapper.map(document, documentDto.class)).toList();
     }
 
+    @Transactional
     @Override
-    public List<BorrowDocDto> addBorrowDto(BorrowForm borrowForm) {
+    public List<BorrowDocDto> addBorrowDto(@NotNull BorrowForm borrowForm) {
         BorrowDoc borrowDoc = new BorrowDoc();
         List<BorrowDocDto> result = new LinkedList<>();
 
@@ -272,8 +275,9 @@ public class ClientServiceImpl implements ClientService {
         }).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
-    public Long addBill(BillForm billForm) {
+    public Long addBill(@NotNull BillForm billForm) {
 
         Client client = clientRepository.getById(Long.parseLong(billForm.getIdClient()));
 

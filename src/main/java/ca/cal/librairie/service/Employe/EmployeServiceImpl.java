@@ -23,6 +23,7 @@ import ca.cal.librairie.persistence.Users.ClientRepository;
 import ca.cal.librairie.persistence.Users.EmployeRepository;
 import ca.cal.librairie.persistence.Utils.BillRepository;
 import ca.cal.librairie.persistence.Utils.BorrowDocRepository;
+import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,7 +71,7 @@ public class EmployeServiceImpl implements EmployeService {
 
     @Transactional
     @Override
-    public ClientDto addClientDto(ClientDto client) {
+    public ClientDto addClientDto(@NotNull ClientDto client) {
         if (client.getId().equals("")) {
             Client client1 = modelMapper.map(client, Client.class);
             System.out.println("Client dans le service " + client1);
@@ -92,7 +93,7 @@ public class EmployeServiceImpl implements EmployeService {
 
     @Transactional
     @Override
-    public ClientDto updateClientDto(ClientDto clientDto) {
+    public ClientDto updateClientDto(@NotNull ClientDto clientDto) {
         System.out.println(Long.parseLong(clientDto.getId()));
         Client client = clientRepository.findById(Long.parseLong(clientDto.getId())).get();
 
@@ -116,7 +117,7 @@ public class EmployeServiceImpl implements EmployeService {
 
     @Transactional
     @Override
-    public void addDocDto(documentDto documentDto) {
+    public void addDocDto(@NotNull documentDto documentDto) {
 
         if (documentDto.getId().equals("")) {
             if (documentDto.getType().equals("Book")) {
@@ -158,8 +159,9 @@ public class EmployeServiceImpl implements EmployeService {
 
     }
 
+    @Transactional
     @Override
-    public List<BorrowDocDto> addBorrowDto(BorrowForm borrowForm) {
+    public List<BorrowDocDto> addBorrowDto(@NotNull BorrowForm borrowForm) {
         BorrowDoc borrowDoc = new BorrowDoc();
         List<BorrowDocDto> result = new LinkedList<>();
 
@@ -203,8 +205,9 @@ public class EmployeServiceImpl implements EmployeService {
         return result;
     }
 
+    @Transactional
     @Override
-    public Long addBillDto(BillForm billForm) {
+    public Long addBillDto(@NotNull BillForm billForm) {
 
         Client client = clientRepository.getById(Long.parseLong(billForm.getIdClient()));
 
@@ -247,8 +250,9 @@ public class EmployeServiceImpl implements EmployeService {
         addFineToBorrowsDtoDelay(borrowDocRepository.getborrowedBookByExpireDelay(LocalDate.now()));
     }
 
+    @Transactional
     @Override
-    public void addFineToBorrowsDtoDelay(List<BorrowDoc> borrowDocs) {
+    public void addFineToBorrowsDtoDelay(@NotNull List<BorrowDoc> borrowDocs) {
 
         double cost = 0.25;
 
@@ -294,8 +298,9 @@ public class EmployeServiceImpl implements EmployeService {
         return modelMapper.map(bill, BillDto.class);
     }
 
+    @Transactional
     @Override
-    public Long updateBorrow(BorrowDocDto borrowDocDto) {
+    public Long updateBorrow(@NotNull BorrowDocDto borrowDocDto) {
         BorrowDoc borrowDoc = borrowDocRepository.getById(Long.parseLong(borrowDocDto.getId()));
 
         borrowDoc.setDocument(dvdRepository.getDocId(Long.parseLong(borrowDocDto.getDocument().getId())));
@@ -312,6 +317,7 @@ public class EmployeServiceImpl implements EmployeService {
 
     }
 
+    @Transactional
     public BillDto updateBill(BillDto billDto) {
 
         System.out.println(billDto);

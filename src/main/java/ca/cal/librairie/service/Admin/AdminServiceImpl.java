@@ -22,6 +22,7 @@ import ca.cal.librairie.persistence.Users.ClientRepository;
 import ca.cal.librairie.persistence.Users.EmployeRepository;
 import ca.cal.librairie.persistence.Utils.BillRepository;
 import ca.cal.librairie.persistence.Utils.BorrowDocRepository;
+import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,7 +76,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public EmployeDto addEmployeDto(EmployeDto employeDto) {
+    public EmployeDto addEmployeDto(@NotNull EmployeDto employeDto) {
         if (employeDto.getId().equals("")) {
             Employe employe = modelMapper.map(employeDto, Employe.class);
             employeRepository.save(employe);
@@ -87,7 +88,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public EmployeDto updateEmploye(EmployeDto employeDto) {
+    public EmployeDto updateEmploye(@NotNull EmployeDto employeDto) {
 
         Employe employe = employeRepository.getById(Long.parseLong(employeDto.getId()));
 
@@ -113,7 +114,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public void deleteDocDto(Document removeDoc) {
+    public void deleteDocDto(@NotNull Document removeDoc) {
         if (!documentRepository.existsById(removeDoc.getDocumentId())) {
             throw new NullPointerException("Aucun Document avec cette id :" + removeDoc.getDocumentId());
         } else {
@@ -123,7 +124,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public List<BorrowDocDto> updateBorrow(BorrowDocDto borrowDocDto) {
+    public List<BorrowDocDto> updateBorrow(@NotNull BorrowDocDto borrowDocDto) {
         System.out.println(borrowDocDto.getId());
         BorrowDoc borrowDoc = borrowDocRepository.getById(Long.parseLong(borrowDocDto.getId()));
 
@@ -156,7 +157,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public void deleteBillDto(BillDto billDto) {
+    public void deleteBillDto(@NotNull BillDto billDto) {
         billRepository.deleteById(Long.parseLong(billDto.getId()));
     }
 
@@ -171,7 +172,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public List<BillDto> updateBillDto(BillDto billDto) {
+    public List<BillDto> updateBillDto(@NotNull BillDto billDto) {
 
         List<BillDto> result = new LinkedList<>();
         Bill bill = billRepository.getById(Long.parseLong(billDto.getId()));
@@ -190,7 +191,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public Long addBillDto(BillForm billDto) {
+    public Long addBillDto(@NotNull BillForm billDto) {
 
         Client client = clientRepository.getById(Long.parseLong(billDto.getIdClient()));
 

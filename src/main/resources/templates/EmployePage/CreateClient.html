@@ -65,7 +65,6 @@
 
 <div><h2>Modifier un Client Id:</h2></div>
 <form action="#" th:action="@{client/editClient}" th:object="${editClient}" method="post">
-    <p th:if="${error}" class="error">UserName & Password Incorrect</p>
     <input type="number" th:field="*{id}"/>
     <input type="submit" value="Sauve">
 </form>
