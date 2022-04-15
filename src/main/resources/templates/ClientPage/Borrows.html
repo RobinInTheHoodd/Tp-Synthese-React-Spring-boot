@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Emprunt</title>
+</head>
+<body>
+ <h1> Emprunt : </h1>
+
+
+ <div th:replace="ClientPage/NavBar :: html_headerClient"></div>
+
+ <div><h2>Ajouter un emprunt</h2></div>
+
+ <form action="#" th:action="@{client/addBorrow}" th:object="${addBorrow}" method="post">
+     <table border="1">
+         <tr>
+             <td><label>Id document</label></td>
+             <td><input type="number" th:field="*{document}" required/></td>
+
+         </tr>
+         <tr>
+             <td><input type="submit" value="Sauve" /></td>
+         </tr>
+     </table>
+ </form>
+
+
+
+
+ <div><h2>Emprunts :</h2></div>
+
+<table>
+    <thead>
+    <th>Prénom</th>
+    <th>Nom</th>
+    <th>Type document</th>
+    <th>Titre </th>
+    <th>Autheur</th>
+    <th>Date d'emprunt</th>
+    <th>Date de retour</th>
+    <th>Jour en retard</th>
+    <th>Amende</th>
+    <th>Retourné</th>
+
+
+
+
+
+    </thead>
+    <tbody>
+    <th:block th:each="BorrowDocDto, stat :*{clientBorrows}">
+        <tr>
+            <td th:text="*{clientBorrows[__${stat.index}__].getClient().getFirstName()}"></td>
+            <td th:text="*{clientBorrows[__${stat.index}__].getClient().getSecondName()}"></td>
+
+
+            <td th:text="*{clientBorrows[__${stat.index}__].getDocument().getType()}"></td>
+            <td th:text="*{clientBorrows[__${stat.index}__].getDocument().getTitle()}"></td>
+            <td th:text="*{clientBorrows[__${stat.index}__].getDocument().getAuthor()}"></td>
+
+
+            <td th:text="*{clientBorrows[__${stat.index}__].getDateBorrowing()}"></td>
+            <td th:text="*{clientBorrows[__${stat.index}__].getDateReturn()}"></td>
+
+            <td th:text="*{clientBorrows[__${stat.index}__].getLateReturnDay()}"></td>
+            <td th:text="*{clientBorrows[__${stat.index}__].getClient().getFine()}"></td>
+            <td th:text="*{clientBorrows[__${stat.index}__].isReturned()}"></td>
+
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+
+
+</body>
+</html>

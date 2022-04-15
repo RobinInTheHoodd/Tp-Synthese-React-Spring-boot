@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Emprunt</title>
+</head>
+<body>
+ <h1> Emprunt : </h1>
+
+
+ <div th:replace="EmployePage/NavBar :: html_headerEmploye"></div>
+
+
+ <div><h2>Supprimer un emprunt</h2></div>
+ <form action="#" th:action="@{employe/deleteborrow}" th:object="${deleteBorrow}" method="post">
+     <table border="1">
+         <tr>
+             <td><label>Id d'Emprunt à supprimer</label></td>
+             <td><input type="text" th:field="*{borrow}" required/></td>
+         </tr>
+         <tr>
+             <td><input type="submit" value="Sauve" /></td>
+         </tr>
+     </table>
+ </form>
+ <br>
+ <br>
+
+ <div><h2>Modifier un emprunt</h2></div>
+ <form action="#" th:action="@{employe/updateBorrow}" th:object="${updateBorrow}" method="post">
+     <table border="1">
+         <tr>
+             <td><label>Id d'Emprunt à modifier</label></td>
+             <td><input type="text" th:field="*{borrow}" required/></td>
+         </tr>
+         <tr>
+             <td><input type="submit" value="Sauve" required /></td>
+         </tr>
+     </table>
+ </form>
+<br>
+<br>
+
+ <form action="#" th:action="@{employe/editBorrow}" th:object="${editBorrow}" method="post">
+     <input type="hidden" th:field="*{id}" />
+     <table border="1">
+         <tr>
+             <td><label>Id Client</label></td>
+             <td><input type="text" th:field="*{client.id}" required/></td>
+         </tr>
+         <tr>
+             <td><label>Id Document</label></td>
+             <td><input type="text" th:field="*{document.id}" required/></td>
+         </tr>
+         <tr>
+             <td><label>Date d'emprunt</label></td>
+             <td><input type="date" th:field="*{dateBorrowing}" required/></td>
+         </tr>
+         <tr>
+             <td><label>Date de retour</label></td>
+             <td><input type="date" th:field="*{dateReturn}" required/></td>
+         </tr>
+         <tr>
+             <td><label>Jour en retard</label></td>
+             <td><input type="number" th:field="*{lateReturnDay}" required/></td>
+         </tr>
+         <tr>
+             <td><label>Retourné</label></td>
+             <td><input type="checkbox" th:field="*{returned}" required/></td>
+         </tr>
+
+         <tr>
+             <td><input type="submit" value="Sauve" /></td>
+         </tr>
+     </table>
+ </form>
+
+
+
+ <div><h2>Ajouter un emprunt</h2></div>
+
+ <form action="#" th:action="@{employe/addborrow}" th:object="${addBorrow}" method="post">
+     <table border="1">
+         <tr>
+             <td><label>Id document</label></td>
+             <td><input type="number" th:field="*{document}" required/></td>
+
+         </tr>
+         <tr>
+             <td><label>Id Client</label></td>
+             <td><input type="number" th:field="*{client}" required/></td>
+
+         </tr>
+         <tr>
+             <td><input type="submit" value="Sauve" /></td>
+         </tr>
+     </table>
+ </form>
+
+
+
+
+ <div><h2>Emprunt des clients</h2></div>
+
+<table>
+    <thead>
+    <th>Prénom</th>
+    <th>Nom</th>
+    <th>Type document</th>
+    <th>Titre </th>
+    <th>Autheur</th>
+    <th>Date d'emprunt</th>
+    <th>Date de retour</th>
+    <th>Jour en retard</th>
+    <th>Amende</th>
+    <th>Retourné</th>
+
+
+
+
+
+    </thead>
+    <tbody>
+    <th:block th:each="BorrowDocDto, stat :*{clientBorrows}">
+        <tr>
+            <td th:text="*{clientBorrows[__${stat.index}__].getClient().getFirstName()}"></td>
+            <td th:text="*{clientBorrows[__${stat.index}__].getClient().getSecondName()}"></td>
+
+
+            <td th:text="*{clientBorrows[__${stat.index}__].getDocument().getType()}"></td>
+            <td th:text="*{clientBorrows[__${stat.index}__].getDocument().getTitle()}"></td>
+            <td th:text="*{clientBorrows[__${stat.index}__].getDocument().getAuthor()}"></td>
+
+
+            <td th:text="*{clientBorrows[__${stat.index}__].getDateBorrowing()}"></td>
+            <td th:text="*{clientBorrows[__${stat.index}__].getDateReturn()}"></td>
+
+            <td th:text="*{clientBorrows[__${stat.index}__].getLateReturnDay()}"></td>
+            <td th:text="*{clientBorrows[__${stat.index}__].getClient().getFine()}"></td>
+            <td th:text="*{clientBorrows[__${stat.index}__].isReturned()}"></td>
+
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+
+
+</body>
+</html>

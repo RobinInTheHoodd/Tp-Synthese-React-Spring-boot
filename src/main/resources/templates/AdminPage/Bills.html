@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+
+
+<div th:replace="AdminPage/NavBar :: html_headerAdmin"></div>
+
+<div><h1>Facture :</h1></div>
+
+<div><h2>Supprimer une Facture :</h2></div>
+<form action="#" th:action="@{admin/deleteBill}" th:object="${deleteBillId}"  method="post">
+    <table border="1">
+        <tr>
+            <td><label>Id Facture : </label></td>
+            <td><input type="text" th:field="*{id}" required></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Supprimer"></td>
+        </tr>
+    </table>
+</form>
+
+
+<div><h2>Modification de facture :</h2></div>
+<form action="#" th:action="@{admin/updateBillId}" th:object="${updateBillId}"  method="post">
+    <table border="1">
+        <tr>
+            <td><label>Id Facture : </label></td>
+            <td><input type="text" th:field="*{id}" required></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Recherche"></td>
+        </tr>
+    </table>
+</form>
+
+<br>
+<br>
+
+<form action="#" th:action="@{admin/updateBill}" th:object="${updateBillDto}"  method="post">
+    <input type="hidden" th:field="*{id}">
+    <table border="1">
+        <tr>
+            <td><label>Payé : </label></td>
+            <td><input type="number" th:field="*{amount}" name="client" required></td>
+        </tr>
+        <tr>
+            <td><label>Montant à payer : </label></td>
+            <td><input type="number" th:field="*{paid}" name="montant" required></td>
+        </tr>
+        <tr>
+            <td><label>Payé le : </label></td>
+            <td><input type="date" th:field="*{paidOn}" name="montant" required></td>
+        </tr>
+        <tr>
+            <td><label>Montant avant : </label></td>
+            <td><input type="number" th:field="*{accountBalanceBefore}" name="montant" required></td>
+        </tr>
+        <tr>
+            <td><label>Montant aprés : </label></td>
+            <td><input type="number" th:field="*{accountBalanceAfter}" name="montant" required></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Payer"></td>
+        </tr>
+    </table>
+</form>
+
+<br>
+<br>
+
+<div><h2>Ajout de facture :</h2></div>
+
+<form action="#" th:action="@{admin/addBill}" th:object="${addBill}"  method="post">
+    <table border="1">
+        <tr>
+            <td><label>Id Client : </label></td>
+            <td><input type="text" th:field="*{idClient}" required></td>
+        </tr>
+        <tr>
+            <td><label>Montant : </label></td>
+            <td><input type="text" th:field="*{paid}" required></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Recherche" required></td>
+        </tr>
+    </table>
+</form>
+
+
+<br>
+<br>
+
+<table border="1">
+    <thead>
+    <th>Nom</th>
+    <th>Prénom</th>
+    <th>Montant</th>
+    <th>Payé</th>
+    <th>Date</th>
+    </thead>
+    <tbody>
+    <th:block th:each="billfrom, stat :${Bills}">
+        <tr>
+
+            <td th:text="*{Bills[__${stat.index}__].client.secondName}"></td>
+            <td th:text="*{Bills[__${stat.index}__].client.firstName}"></td>
+            <td th:text="*{Bills[__${stat.index}__].getAmount()}"></td>
+            <td th:text="*{Bills[__${stat.index}__].getPaid()}"></td>
+            <td th:text="*{Bills[__${stat.index}__].getPaidOn()}"></td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+
+
+
+</body>
+</html>

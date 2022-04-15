@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:replace="EmployePage/NavBar :: html_headerEmploye"></div>
+
+<table>
+    <thead>
+    <th>Nom</th>
+    <th>Prenom</th>
+    <th>Anniversaire</th>
+    <th>email</th>
+    <th>Téléphone</th>
+    <th>Numéro Maison</th>
+    <th>Rue</th>
+    <th>Ville</th>
+    <th>Province</th>
+    <th>Code postal</th>
+    <th>Amande</th>
+    <th>Emprunt</th>
+    <th>Facture</th>
+
+
+    </thead>
+    <tbody>
+    <th:block th:each="client, stat :${clients}">
+        <tr>
+            <td th:text="*{clients[__${stat.index}__].getSecondName()}"></td>
+            <td th:text="${clients[__${stat.index}__].getFirstName()}"></td>
+            <td th:text="${clients[__${stat.index}__].getBitrhday()}"></td>
+            <td th:text="${clients[__${stat.index}__].getEmail()}"></td>
+            <td th:text="${clients[__${stat.index}__].getPhoneNumber()}"></td>
+            <td th:text="${clients[__${stat.index}__].getAddress().getHouseNumber()}"></td>
+            <td th:text="${clients[__${stat.index}__].getAddress().getStreetAddress()}"></td>
+            <td th:text="${clients[__${stat.index}__].getAddress().getCity()}"></td>
+            <td th:text="${clients[__${stat.index}__].getAddress().getState()}"></td>
+            <td th:text="${clients[__${stat.index}__].getAddress().getZipCode()}"></td>
+            <td th:text="${clients[__${stat.index}__].getFine()}"></td>
+            <td th:text="${clients[__${stat.index}__].getBorrowDocs()}"></td>
+            <td th:text="${clients[__${stat.index}__].getBills()}"></td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+
+
+</body>
+</html>

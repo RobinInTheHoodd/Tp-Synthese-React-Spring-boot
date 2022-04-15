@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Documents de la librairie</title>
+</head>
+<body>
+
+<div th:replace="EmployePage/NavBar.html :: html_headerEmploye"></div>
+
+<div><h1>Ajout de document</h1></div>
+
+<form action="#" th:action="@{employe/addDoc}" th:object="${createDoc}" method="post">
+    <input type="hidden" th:field="*{id}">
+    <table border="1">
+        <tr>
+            <td><label>Type</label></td>
+            <td><select type="text" th:field="*{type}" required/>
+                <option value="Book">Livre</option>
+                <option value="CD">CD</option>
+                <option value="DVD">DVD</option>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Titre</label></td>
+            <td><input type="text" th:field="*{title}" required/></td>
+        </tr>
+        <tr>
+            <td><label>Autheur</label></td>
+            <td><input type="text" th:field="*{author}" required/></td>
+        </tr>
+        <tr>
+            <td><label>Editeur</label></td>
+            <td><input type="text" th:field="*{editor}" required/></td>
+        </tr>
+        <tr>
+            <td><label>Date de publication</label></td>
+            <td><input type="date" th:field="*{dateOfPublication}" required /></td>
+        </tr>
+        <tr>
+            <td><label>Nombre de page</label></td>
+            <td><input type="number" th:field="*{numberPage}" required /></td>
+        </tr>
+        <tr>
+            <td><label>Exemplaire</label></td>
+            <td><input type="number" th:field="*{exemplary}" required/></td>
+        </tr>
+        <tr>
+            <td><label>Genre</label></td>
+            <td><input type="text" th:field="*{genre}" /></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Sauve"></td>
+        </tr>
+    </table>
+</form>
+
+<div><h2>Modifier un document par id</h2></div>
+<form action="#" th:action="@{employe/updateDoc}" th:object="${updateDoc}"  method="post">
+    <div>
+        <label for="iddoc">Id document</label>
+        <input type="number" id="iddoc" name="title" th:field="*{id}" required>
+    </div>
+
+    <div>
+        <input type="submit" value="Search">
+    </div>
+</form>
+
+<div><h2>Supprimer un document par id</h2></div>
+<form action="#" th:action="@{employe/removeDocs}" th:object="${removeDoc}"  method="post">
+    <div>
+        <label for="Id">Id document</label>
+        <input type="number" id="Id" name="title" th:field="*{id}" required>
+
+    </div>
+
+    <div>
+        <input type="submit" value="Search">
+    </div>
+</form>
+
+
+
+
+
+
+<div><h2>Recherche de document</h2></div>
+
+<form action="#" th:action="@{employe/searchDoc}" th:object="${SearchBarDto}"  method="post">
+    <div>
+        <label>Recherche : </label>
+        <input type="text" th:field="*{research}" name="research">
+
+        <select name="document" id="documents" th:field="*{type}">
+            <option value="all">Tous</option>
+            <option value="book">Livre</option>
+            <option value="cd">Cd</option>
+            <option value="dvd">DVD</option>
+        </select>
+        <label for="documents">Type de recherche</label>
+
+        <label for="Title">Titre</label>
+        <input type="checkbox" id="Title" name="title" th:field="*{title}">
+
+        <label for="Author">Autheur</label>
+        <input type="checkbox" id="Author" name="author" th:field="*{author}">
+
+        <label for="Editor">Editeur</label>
+        <input type="checkbox" id="Editor" name="editor" th:field="*{editor}">
+
+        <label for="Genre">Genre</label>
+        <input type="checkbox" id="Genre" name="genre" th:field="*{genre}">
+
+    </div>
+
+    <div>
+        <input type="submit" value="Search">
+    </div>
+</form>
+
+
+<div><h2>Résultat de la recherche</h2></div>
+
+
+<table>
+    <thead>
+    <th>Type</th>
+    <th>Titre</th>
+    <th>Autheur</th>
+    <th>Editor</th>
+    <th>date de publication</th>
+    <th>Nombre de page</th>
+    <th>Exemplaire</th>
+    <th>Genre</th>
+
+    </thead>
+    <tbody>
+    <th:block th:each="documentdto, stat :${docs}">
+        <tr>
+             <td th:text="*{docs[__${stat.index}__].getType()}"></td>
+            <td th:text="*{docs[__${stat.index}__].getTitle()}"></td>
+            <td th:text="*{docs[__${stat.index}__].getAuthor()}"></td>
+            <td th:text="*{docs[__${stat.index}__].getEditor()}"></td>
+            <td th:text="*{docs[__${stat.index}__].getDateOfPublication()}"></td>
+            <td th:text="*{docs[__${stat.index}__].getNumberPage()}"></td>
+            <td th:text="*{docs[__${stat.index}__].getExemplary()}"></td>
+            <td th:text="*{docs[__${stat.index}__].getGenre()}"></td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Clients</title>
+</head>
+<body>
+
+<h1>Page Clients</h1>
+
+ <div th:replace="ClientPage/NavBar :: html_headerClient"></div>
+
+
+<table>
+    <thead>
+    <th>Nom</th>
+    <th>Prenom</th>
+    <th>Anniversaire</th>
+    <th>Numéro de compte</th>
+    <th>Téléphone</th>
+    <th>Numéro Maison</th>
+    <th>Rue</th>
+    <th>Ville</th>
+    <th>Province</th>
+    <th>Code postal</th>
+    <th>Amande</th>
+    <th>Emprunt</th>
+    <th>Facture</th>
+
+
+    </thead>
+    <tbody>
+    <th:block th:object="${client}">
+        <tr>
+            <td th:text="${client.getFirstName()}"></td>
+            <td th:text="${client.getFirstName()}"></td>
+            <td th:text="${client.getBitrhday()}"></td>
+            <td th:text="${client.getEmail()}"></td>
+            <td th:text="${client.getPhoneNumber()}"></td>
+            <td th:text="${client.getAddress().getHouseNumber()}"></td>
+            <td th:text="${client.getAddress().getStreetAddress()}"></td>
+            <td th:text="${client.getAddress().getCity()}"></td>
+            <td th:text="${client.getAddress().getState()}"></td>
+            <td th:text="${client.getAddress().getZipCode()}"></td>
+            <td th:text="${client.getFine()}"></td>
+            <td th:text="${client.getBorrowDocs()}"></td>
+            <td th:text="${client.getBills()}"></td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+
+</body>
+</html>

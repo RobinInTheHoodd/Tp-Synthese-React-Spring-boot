@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/CSS/styleLogin.css}" rel="stylesheet">
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <div class="wrapper">
+        <div class="title"><span>Login Form</span></div>
+        <form th:action="@{/login}" th:object="${loginForm}" method="post">
+            <p th:if="${error}" class="error">UserName & Password Incorrect</p>
+
+            <label for="role">Role :</label>
+            <div class="row">
+                <select name="role" id="role">
+                    <option value="Employe">Employe</option>
+                    <option value="Client">Client</option>
+                    <option value="Admin">Admin</option>
+                </select>
+
+
+            </div>
+
+            <label for="username">Email:</label>
+            <div class="row">
+                <input id="username" type="text" name="username">
+            </div>
+
+            <label for="password">Password :</label>
+            <div class="row">
+                <input id="password" type="password" name="password">
+            </div>
+            <div class="row button">
+                <input type="submit" value="Login">
+            </div>
+        </form>
+    </div>
+</div>
+
+
+</body>
+</html>
