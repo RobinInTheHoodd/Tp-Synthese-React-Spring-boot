@@ -39,14 +39,27 @@ public class ConnectionController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute(name="loginForm") LoginUser login, Model model, RedirectAttributes redirectAttributes) {
-        String uname = login.getUsername();
-        String pass = login.getPassword();
+        String uname;
+        String pass;
         String role = login.getRole();
 
 
         if(role.equals("Employe")){
+            /**
+             EmployeDto employeDto = loginService.CheckLoginEmploye(uname, pass);
+             if (employeDto == null){
+             model.addAttribute("error", "Incorrect Username & Password");
+             return "index";
+             } else{
+             System.out.println("depuis login form : "+employeDto);
+             redirectAttributes.addFlashAttribute("userHeaderEmp", employeDto);
+             model.addAttribute("userHeaderEmp", employeDto);
+             return "redirect:" + employeDto.getId() + "/employe";
+             }
+             */
+            uname = "rmzn@gmail.com";
+            pass = "password";
             EmployeDto employeDto = loginService.CheckLoginEmploye(uname, pass);
-
             if (employeDto == null){
                 model.addAttribute("error", "Incorrect Username & Password");
                 return "index";
@@ -56,8 +69,25 @@ public class ConnectionController {
                 model.addAttribute("userHeaderEmp", employeDto);
                 return "redirect:" + employeDto.getId() + "/employe";
             }
+
+
         } else if (role.equals("Client")){
 
+            /**
+             ClientDto clientDto = loginService.CheckLoginClient(uname, pass);
+             if (clientDto == null){
+             model.addAttribute("error", "Incorrect Username & Password");
+             return "index";
+             } else{
+             System.out.println(clientDto);
+             redirectAttributes.addFlashAttribute("userHeader", clientDto);
+             model.addAttribute("userHeader", clientDto);
+             return "redirect:" + clientDto.getId() + "/client";
+             }
+             */
+
+            uname = "rmzn@gmail.com";
+            pass = "password";
             ClientDto clientDto = loginService.CheckLoginClient(uname, pass);
             if (clientDto == null){
                 model.addAttribute("error", "Incorrect Username & Password");
@@ -71,6 +101,21 @@ public class ConnectionController {
 
 
         } else {
+            /**
+             AdminDto adminDto = loginService.CheckLoginAdmin(uname, pass);
+             if (adminDto == null){
+             model.addAttribute("error", "Incorrect Username & Password");
+             return "index";
+             } else{
+             System.out.println(adminDto);
+             redirectAttributes.addFlashAttribute("userHeaderAdmin", adminDto);
+             model.addAttribute("userHeaderAdmin", adminDto);
+             return "redirect:" + adminDto.getId() + "/admin";
+             }
+             */
+
+            uname = "rmzn@gmail.com";
+            pass = "password";
             AdminDto adminDto = loginService.CheckLoginAdmin(uname, pass);
             if (adminDto == null){
                 model.addAttribute("error", "Incorrect Username & Password");
