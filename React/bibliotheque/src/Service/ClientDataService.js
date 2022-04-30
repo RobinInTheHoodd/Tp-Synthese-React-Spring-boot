@@ -8,6 +8,14 @@ class UserDataService {
         return axios.get(`${API_URL}` +id+`/client/getBorrows`);
     }
 
+    getBills(id){
+        return axios.get(`${API_URL}` +id+`/client/getBills`);
+    }
+
+    editClient(client, id){
+        return axios.post(`${API_URL}` +id+`/client/editClient`, client);
+    }
+
 }
 
 export default new UserDataService()
