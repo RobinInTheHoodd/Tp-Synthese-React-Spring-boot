@@ -52,7 +52,7 @@ export default function Header({ headerFor }){
 
     return (
         <div>
-        <h1>CLient</h1>
+        <h1>{headerFor}</h1>
         <nav
           style={{
             borderBottom: "solid 1px",
