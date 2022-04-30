@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useCallback} from 'react';
+import {useNavigate} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 
 const columns = [
@@ -46,17 +47,24 @@ export default function Login({dataClient}){
     const [selectedRows, setSelectedRows] = React.useState(false);
     const [toggledClearRows, setToggleClearRows] = React.useState(false);
 
+    const navigate = useNavigate();
+    const ClientPage = useCallback(() => navigate('/client-home', {replace: true}), [navigate]);          
+    const EmployePage = useCallback(() => navigate('/employe-home', {replace: true}), [navigate]);          
+    const AdminPage = useCallback(() => navigate('/admin-home', {replace: true}), [navigate]);          
+
+    const loginSubmit = () => {
+        if(selectedRows.grade === 'Client'){
+            ClientPage();
+        } else if (selectedRows.grade === 'Employe'){
+            EmployePage();
+        } else {
+            AdminPage();
+        }
+    }
+
     const handleChange = ({ selectedRows }) => {
-        // You can set state or dispatch with something like Redux so we can use the retrieved data
-        console.log('Selected Rows: ', selectedRows[0]);
         setSelectedRows(selectedRows[0]);
     };
-
-
-    const handleClearRows = () => {
-        console.log(selectedRows);
-        setToggleClearRows(!toggledClearRows);
-    }
 
 
     return (
@@ -76,14 +84,12 @@ export default function Login({dataClient}){
                     onSelectedRowsChange={handleChange}
                     clearSelectedRows={toggledClearRows}
                     dense
-                    
                 />
                 <hr/>
-                {
-                    selectedRows !== undefined && 
-                        <button onClick={handleClearRows}>
-                            Connecté
-                        </button>
+                {selectedRows !== undefined && 
+                    <button onClick={loginSubmit}>
+                        Connecté
+                    </button>
                 }
             </>
             

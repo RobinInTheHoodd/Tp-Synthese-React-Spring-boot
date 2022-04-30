@@ -61,9 +61,7 @@ function App() {
     return <div>Loading</div>
   } else {
     return (
-      
       <>
-      
          <Login dataClient={data}/>
       </> 
      )

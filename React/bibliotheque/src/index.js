@@ -5,6 +5,8 @@ import App from './App';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 import HomeClient from './components/Client/Home/HomeClient.jsx';
+import HomeEmploye from './components/Employe/Home/HomeEmploye.jsx'
+import HomeAdmin from './components/Admin/Home/HomeAdmin.jsx'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,7 +14,9 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<App />}/>
-        <Route path='/home' element={<HomeClient />}/>
+        <Route path='/client-home' element={<HomeClient />}/>
+        <Route path='/employe-home' element={<HomeEmploye />}/>
+        <Route path='/admin-home' element={<HomeAdmin />}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
