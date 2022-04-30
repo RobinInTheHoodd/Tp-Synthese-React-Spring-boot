@@ -17,6 +17,7 @@ root.render(
         <Route path='/client-home' element={<HomeClient />}/>
         <Route path='/employe-home' element={<HomeEmploye />}/>
         <Route path='/admin-home' element={<HomeAdmin />}/>
+        <Route path='/deconnect' element={<App />}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

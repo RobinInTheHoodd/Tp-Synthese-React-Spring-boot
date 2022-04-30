@@ -48,12 +48,29 @@ export default function Login({dataClient}){
     const [toggledClearRows, setToggleClearRows] = React.useState(false);
 
     const navigate = useNavigate();
-    const ClientPage = useCallback(() => navigate('/client-home', {replace: true}), [navigate]);          
+    const ClientPage = useCallback(() => {
+        return navigate('/client-home', 
+        {
+            replace: true,
+            state: {
+                client: selectedRows,
+            }
+            
+        }), [navigate]
+    });          
+
+    
+    
+
+    
+    
+    
     const EmployePage = useCallback(() => navigate('/employe-home', {replace: true}), [navigate]);          
     const AdminPage = useCallback(() => navigate('/admin-home', {replace: true}), [navigate]);          
 
     const loginSubmit = () => {
         if(selectedRows.grade === 'Client'){
+            console.log(selectedRows);
             ClientPage();
         } else if (selectedRows.grade === 'Employe'){
             EmployePage();

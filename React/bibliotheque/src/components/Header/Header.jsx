@@ -5,7 +5,8 @@ const headerClient = {
     home: 'Home',
     searchDocument: 'Reherche de document',
     borrowDocs: 'Emprunts',
-    bills: 'Factures'
+    bills: 'Factures',
+    deconnect: 'Déconnecter'
 }
 
 const headerEmploye = {
@@ -13,7 +14,8 @@ const headerEmploye = {
     clients: 'Clients',
     searchDocument: 'Reherche de document',
     borrowDocs: 'Emprunts',
-    bills: 'Factures'
+    bills: 'Factures',
+    deconnect: 'Déconnecter'
 }
 
 const headerAdmin = {
@@ -22,7 +24,8 @@ const headerAdmin = {
     employes: 'Employes',
     searchDocument: 'Reherche de document',
     borrowDocs: 'Emprunts',
-    bills: 'Factures'
+    bills: 'Factures',
+    deconnect: 'Déconnecter'
 }
 
 export default function Header({ headerFor }){
