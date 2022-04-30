@@ -14,9 +14,9 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<App />}/>
-        <Route path='/client-home' element={<HomeClient />}/>
-        <Route path='/employe-home' element={<HomeEmploye />}/>
-        <Route path='/admin-home' element={<HomeAdmin />}/>
+        <Route path='/client/home' element={<HomeClient />}/>
+        <Route path='/employe' element={<HomeEmploye />}/>
+        <Route path='/admin' element={<HomeAdmin />}/>
         <Route path='/deconnect' element={<App />}/>
       </Routes>
     </BrowserRouter>

@@ -49,7 +49,7 @@ export default function Login({dataClient}){
 
     const navigate = useNavigate();
     const ClientPage = useCallback(() => {
-        return navigate('/client-home', 
+        return navigate('/client/Home', 
         {
             replace: true,
             state: {
@@ -60,17 +60,11 @@ export default function Login({dataClient}){
     });          
 
     
-    
-
-    
-    
-    
-    const EmployePage = useCallback(() => navigate('/employe-home', {replace: true}), [navigate]);          
-    const AdminPage = useCallback(() => navigate('/admin-home', {replace: true}), [navigate]);          
+    const EmployePage = useCallback(() => navigate('/employe', {replace: true}), [navigate]);          
+    const AdminPage = useCallback(() => navigate('/admin', {replace: true}), [navigate]);          
 
     const loginSubmit = () => {
         if(selectedRows.grade === 'Client'){
-            console.log(selectedRows);
             ClientPage();
         } else if (selectedRows.grade === 'Employe'){
             EmployePage();

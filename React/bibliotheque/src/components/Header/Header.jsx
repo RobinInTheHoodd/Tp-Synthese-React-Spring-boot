@@ -47,7 +47,7 @@ export default function Header({ headerFor }){
         (field) => {
             return (
                 <>
-                    <Link to={'/'+field}>{header[field]}</Link> | { " " }
+                    <Link to={"/"+field}>{header[field]}</Link> | { " " }
                 </>
             );
         }
