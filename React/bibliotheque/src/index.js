@@ -19,7 +19,7 @@ root.render(
         <Route path='/client/searchDocument' element={<SearchDocument />}/>
         <Route path='/employe' element={<HomeEmploye />}/>
         <Route path='/admin' element={<HomeAdmin />}/>
-        <Route path='/deconnect' element={<App />}/>
+        <Route path='/client/deconnect' element={<App />}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

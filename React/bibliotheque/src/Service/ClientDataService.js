@@ -19,6 +19,11 @@ class UserDataService {
     editClient(client, id){
         return axios.post(`${API_URL}` +id+`/client/editClient`, client);
     }
+        
+    searchDocument(search, id){
+        return axios.post(`${API_URL}` +id+`/client/searchDocs`, search);
+
+    }
 
 
 

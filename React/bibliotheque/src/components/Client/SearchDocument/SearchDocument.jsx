@@ -1,9 +1,11 @@
 import Header from "../../Header/Header"
 import {useLocation} from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import React from "react";
 import DataTable from 'react-data-table-component';
-import ClientDataService from "../../../Service/ClientDataService";
+import ClientDataService from "../../../Service/ClientDataService"; 
+
+import FormSearchDoc from "./FormSearchDoc";
 
 const columnsDocuments = [
     {
@@ -47,58 +49,108 @@ const columnsDocuments = [
         name: 'Exemplaire',
         selector: (row) => row.exemplary,
         sortable: true,
+        conditionalCellStyles:[
+            {
+                when: row => {
+                    if(row.exemplary > 1){
+                      return true;        
+                    } 
+                  },
+                style: {
+                  disabled: 'true',
+                },
+            },
+        ]
+    },
+    {          
+        name:"Emprunter",
+        cell: (row) => row.exemplary > 1 && <button> Emprunter</button>,
+        ignoreRowClick: true,
+        allowOverflow: true,
+        button: true,
+    
     },
 ];
 
 const useFetch = (id) => {
     const [data, setData] = useState(null);
     
-    async function fetchData() {
-      const documents = await fetchDataDocument().then(
-          response =>{
-              return response;
-          }
-      );
-      setData(documents);
+    async function fetchData(search) {
+        let response;
+        if(search === undefined){
+            response = await ClientDataService.getDocuments(id);
+        } else response = await ClientDataService.searchDocument(search ,id);
+        const json = await response.data;
+        setData(json);
     }
-  
-    async function fetchDataDocument(){
-    const response = await ClientDataService.getDocuments(id);
-      const json = await response.data
-      return json;
-    }  
-
     useEffect(() => {fetchData()},[]);
 
-    return data;
+    return [data, fetchData];
 };
 
 export default function SearchDocument(){ 
 
     const dataClient = useLocation().state.client;
     const [client, setClient] = React.useState(dataClient);
-    const documents = useFetch(client[0].id);
+
+    const [searchBar, setSearchBar] = useState({
+        type: "all",
+        title: 'false',
+        author: 'false',
+        editor: 'false',
+        genre: 'false',
+        research: ''
+    });
+
+
+    const [documents, fetchData] = useFetch(client[0].id);
+
+
+    const handleChangeSearchBar = (event) => {
+        event.preventDefault();
+        const name = event.target.name;
+        const value = event.target.value;
+        const check = event.target.checked.toString();
+        if(name === 'research'){
+            setSearchBar(values => ({...values, [name]: value}));
+        } else setSearchBar(values => ({...values, [name]: check}));
+        
+    }
+
+    const HandleSubmitSearchBar = (event) => {
+        event.preventDefault();
+        fetchData(searchBar);
+    };
+
 
     if(!documents){
         return <div>Loading</div>
-      } else {
+    } else {
         return(
             <>
                 <Header
                     headerFor={'client'}
                     clients={client}
                 />
+                <br/><br/><br/><br/>
+                <div>
+                    <FormSearchDoc 
+                        searchBar={searchBar}
+                        handleChange={handleChangeSearchBar}
+                        handleSubmit={HandleSubmitSearchBar}
+                    />
+                </div>
+                <br/><br/>
                 <div className="container_document">                    
                     <DataTable
                         columns={columnsDocuments}
                         data={documents}
                         striped
-                        selectableRows
-                        selectableRowsSingle
                         pagination
-                        dense
+                        defaultSortFieldId={2}
                     />
                 </div>
+                
             </>
         )
     }
