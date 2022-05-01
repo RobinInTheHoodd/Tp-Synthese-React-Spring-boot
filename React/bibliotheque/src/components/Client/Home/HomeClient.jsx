@@ -213,15 +213,13 @@ export default function HomeClient({}){
                     dense
                 />
                 <div className="editClientContainer">
-
-                    {
-                    editClient &&
+                    {editClient &&
                         <div className="container"> 
-                        <EditClient 
-                            handleChange={handleChangeNewClient}
-                            handleSubmit={handleSubmitNewClient}
-                            client={editClient}
-                        />
+                            <EditClient 
+                                handleChange={handleChangeNewClient}
+                                handleSubmit={handleSubmitNewClient}
+                                client={editClient}
+                            />
                         </div>    
                     }
                 </div>

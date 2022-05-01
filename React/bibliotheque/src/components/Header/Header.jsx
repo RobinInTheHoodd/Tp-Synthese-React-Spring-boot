@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const headerClient = {
     home: 'Home',
-    searchDocument: 'Reherche de document',
+    searchDocuments: 'Reherche de document',
     borrowDocs: 'Emprunts',
     bills: 'Factures',
     deconnect: 'Déconnecter'
@@ -12,7 +12,7 @@ const headerClient = {
 const headerEmploye = {
     home: 'Home',
     clients: 'Clients',
-    searchDocument: 'Reherche de document',
+    searchDocuments: 'Reherche de document',
     borrowDocs: 'Emprunts',
     bills: 'Factures',
     deconnect: 'Déconnecter'
@@ -20,9 +20,9 @@ const headerEmploye = {
 
 const headerAdmin = {
     home: 'Home',
-    client: 'Clients',
+    clients: 'Clients',
     employes: 'Employes',
-    searchDocument: 'Reherche de document',
+    searchDocuments: 'Reherche de document',
     borrowDocs: 'Emprunts',
     bills: 'Factures',
     deconnect: 'Déconnecter'

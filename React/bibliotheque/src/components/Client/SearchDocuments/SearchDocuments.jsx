@@ -88,7 +88,7 @@ const useFetch = (id) => {
     return [data, fetchData];
 };
 
-export default function SearchDocument(){ 
+export default function SearchDocuments(){ 
 
     const dataClient = useLocation().state.client;
     const [client, setClient] = React.useState(dataClient);
@@ -102,18 +102,16 @@ export default function SearchDocument(){
         research: ''
     });
 
-
     const [documents, fetchData] = useFetch(client[0].id);
-
 
     const handleChangeSearchBar = (event) => {
         event.preventDefault();
         const name = event.target.name;
         const value = event.target.value;
-        const check = event.target.checked.toString();
-        if(name === 'research'){
+        const check = event.target.checked;
+        if(name === 'research' || name === 'type'){
             setSearchBar(values => ({...values, [name]: value}));
-        } else setSearchBar(values => ({...values, [name]: check}));
+        } else setSearchBar(values => ({...values, [name]: check.toString()}));
         
     }
 
@@ -123,35 +121,35 @@ export default function SearchDocument(){
     };
 
 
-    if(!documents){
-        return <div>Loading</div>
-    } else {
-        return(
-            <>
-                <Header
-                    headerFor={'client'}
-                    clients={client}
-                />
-                <br/><br/><br/><br/>
-                <div>
-                    <FormSearchDoc 
-                        searchBar={searchBar}
-                        handleChange={handleChangeSearchBar}
-                        handleSubmit={HandleSubmitSearchBar}
-                    />
-                </div>
-                <br/><br/>
-                <div className="container_document">                    
-                    <DataTable
-                        columns={columnsDocuments}
-                        data={documents}
-                        striped
-                        pagination
-                        defaultSortFieldId={2}
-                    />
-                </div>
-                
-            </>
-        )
-    }
+    return(
+        <>
+            <Header
+                headerFor={'client'}
+                clients={client}
+            />
+            <br/><br/><br/><br/>
+
+            {documents && 
+                <>  
+                    <div>
+                        <FormSearchDoc 
+                            searchBar={searchBar}
+                            handleChange={handleChangeSearchBar}
+                            handleSubmit={HandleSubmitSearchBar}
+                        />
+                    </div>
+                    <br/><br/>
+                    <div className="container_document">                    
+                        <DataTable
+                            columns={columnsDocuments}
+                            data={documents}
+                            striped
+                            pagination
+                            defaultSortFieldId={2}
+                        />
+                    </div>
+                </>
+            }
+        </>
+    )
 }
