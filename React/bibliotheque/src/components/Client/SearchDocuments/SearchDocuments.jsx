@@ -7,7 +7,7 @@ import ClientDataService from "../../../Service/ClientDataService";
 
 import FormSearchDoc from "./FormSearchDoc";
 
-const columnsDocuments = [
+export const columnsDocuments = [
     {
         name: 'id',
         selector: row => row.id,

@@ -7,6 +7,7 @@ import Header from "../../Header/Header"
 import DataTable from 'react-data-table-component';
 import { AiFillCheckCircle } from "react-icons/ai";
 import { ImCross } from "react-icons/im"
+import { columnsDocuments } from "../SearchDocuments/SearchDocuments";
 
 
 const useFetch = (id) => {
@@ -67,6 +68,29 @@ const columnsBorrowDocs = [
     },
 ];
 
+const columnsDocs = columnsDocuments.filter( row => row.name != 'Emprunter');
+
+const customStyles = {
+    header: {
+        style: {
+            minHeight: '80px',
+        },
+    },
+    headRow: {
+        style: {
+            borderTopStyle: 'solid',
+            borderTopWidth: '1px',
+            borderTopColor: 'black',
+        },
+    },
+    Cells: {
+        style:{
+            borderBottomStyle: 'solid',
+            borderBottomWidth: '1px',
+            borderBottomColor: 'black',
+        },
+    },
+};
 
 export default function BorrowDocuments(){
     const dataClient = useLocation().state.client;
@@ -75,8 +99,20 @@ export default function BorrowDocuments(){
     const [selectedRows, setSelectedRows] = React.useState(false);
     const [toggledClearRows, setToggleClearRows] = React.useState(false);
 
+
     const rowDisabledCriteria = row => row.returned;
 
+    const ExpandedComponent = ({ data }) => 
+    <pre style={{'width': 1000+'px', 'paddingLeft': '20px'}}>
+        <h3>Document :</h3>
+        <DataTable 
+            columns={columnsDocs}
+            data={[data.document]}
+            customStyles={customStyles}
+        
+        />
+        <hr/>
+    </pre>;
   
     const handleChange = ({ selectedRows }) => {
         setSelectedRows(selectedRows.map(row => {
@@ -115,6 +151,8 @@ export default function BorrowDocuments(){
                             selectableRowDisabled={rowDisabledCriteria}
                             onSelectedRowsChange={handleChange}
                             clearSelectedRows={toggledClearRows}
+                            expandableRows
+                            expandableRowsComponent={ExpandedComponent}
                             striped
                             pagination
                         />
