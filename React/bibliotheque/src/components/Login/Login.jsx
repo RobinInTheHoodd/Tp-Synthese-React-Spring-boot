@@ -48,14 +48,14 @@ export default function Login({dataClient}){
     const [toggledClearRows, setToggleClearRows] = React.useState(false);
 
     const navigate = useNavigate();
-    const ClientPage = useCallback(() => {
+    const ClientPage = useCallback(() => 
+    {
         return navigate('/client/home', 
         {
             replace: true,
             state: {
                 client: [selectedRows],
-            }
-            
+            }        
         }), [navigate]
     });          
 

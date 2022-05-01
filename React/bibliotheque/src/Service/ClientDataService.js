@@ -12,9 +12,15 @@ class UserDataService {
         return axios.get(`${API_URL}` +id+`/client/getBills`);
     }
 
+    getDocuments(id){
+        return axios.get(`${API_URL}` +id+`/client/getDocsDto`);
+    }
+
     editClient(client, id){
         return axios.post(`${API_URL}` +id+`/client/editClient`, client);
     }
+
+
 
 }
 

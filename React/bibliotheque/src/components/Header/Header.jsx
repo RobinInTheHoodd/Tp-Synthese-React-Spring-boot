@@ -59,7 +59,6 @@ export default function Header({ headerFor, clients}){
             paddingBottom: "1rem",
           }}
         >
-        {console.log(clients)}
         {header()}
         </nav>
       </div>
