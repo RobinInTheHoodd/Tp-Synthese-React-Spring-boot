@@ -18,7 +18,7 @@ const useFetch = (id) => {
         const json = await response.data;
         setData(json);
     }
-    useEffect(() => {fetchData()},[]);
+    useEffect(() => {fetchData()},[data]);
 
     return [data, fetchData];
 };
@@ -65,14 +65,6 @@ const columnsBorrowDocs = [
             }
         },
     },
-    {          
-        name:"Retourner",
-        cell: (row) => row.returned == false && <button> Retourner</button>,
-        ignoreRowClick: true,
-        allowOverflow: true,
-        button: true,
-    
-    },
 ];
 
 
@@ -80,6 +72,25 @@ export default function BorrowDocuments(){
     const dataClient = useLocation().state.client;
     const [client, setClient] = React.useState(dataClient);
     const [borrowDocs, fetchData] = useFetch(client[0].id);
+    const [selectedRows, setSelectedRows] = React.useState(false);
+    const [toggledClearRows, setToggleClearRows] = React.useState(false);
+
+    const rowDisabledCriteria = row => row.returned;
+
+  
+    const handleChange = ({ selectedRows }) => {
+        setSelectedRows(selectedRows.map(row => {
+            return {...row, ['returned']: true}
+        }));
+    };
+
+    const handleReturnBorrowDocs = () => {
+        console.log(selectedRows);
+        ClientDataService.returnBorrowDocs(selectedRows);
+        setSelectedRows(false);
+        setToggleClearRows(!toggledClearRows);
+        fetchData();
+      }
 
     return(
         <>
@@ -90,21 +101,33 @@ export default function BorrowDocuments(){
                 />
             </div>
 
+
             {
                 borrowDocs &&
                 <div className="containerBorrowDocs">                    
+                <br/><br/>
+                <h2> List d'emprunts</h2>
+                        
                         <DataTable
                             columns={columnsBorrowDocs}
                             data={borrowDocs}
+                            selectableRows
+                            selectableRowDisabled={rowDisabledCriteria}
+                            onSelectedRowsChange={handleChange}
+                            clearSelectedRows={toggledClearRows}
                             striped
                             pagination
                         />
+
+                        {selectedRows != false && 
+                            <button onClick={handleReturnBorrowDocs}>
+                                Retourné Emprunt
+                            </button>
+                        }
                 
                 </div>
                 
             }
-            {console.log(borrowDocs)}
-
         </>
     )
 }
