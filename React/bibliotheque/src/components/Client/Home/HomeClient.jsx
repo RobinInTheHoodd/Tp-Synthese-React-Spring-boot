@@ -39,7 +39,11 @@ const columnsClient = (handleButtonClick) => [
     },
     {
         name: 'birthday',
-        selector: row => row.bitrhday,
+        selector: row => Date(row.bitrhday),
+    },
+    {
+        name: 'Solde',
+        selector: row => row.fine + ' $',
     },
 ];
 
@@ -133,10 +137,9 @@ const customStyles = {
 
 
 export default function HomeClient({}){
-
     const dataClient = useLocation().state.client;
 
-    const [client, setClient] = React.useState([dataClient]);
+    const [client, setClient] = React.useState(dataClient);
     const [editClient, setEditClient] = React.useState(false);
 
     const [borrowDocs, setBorrowDocs] = React.useState(false);
@@ -196,7 +199,10 @@ export default function HomeClient({}){
     
     return(
         <>
-            <Header headerFor={'client'}/>
+            <Header 
+                headerFor={'client'}
+                clients={client}
+            />
             <div>
                 <br/><br/>
                 <h1> Compte Client : </h1>

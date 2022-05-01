@@ -49,11 +49,11 @@ export default function Login({dataClient}){
 
     const navigate = useNavigate();
     const ClientPage = useCallback(() => {
-        return navigate('/client/Home', 
+        return navigate('/client/home', 
         {
             replace: true,
             state: {
-                client: selectedRows,
+                client: [selectedRows],
             }
             
         }), [navigate]

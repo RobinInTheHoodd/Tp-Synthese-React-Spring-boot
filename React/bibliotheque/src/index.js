@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import HomeClient from './components/Client/Home/HomeClient.jsx';
 import HomeEmploye from './components/Employe/Home/HomeEmploye.jsx'
 import HomeAdmin from './components/Admin/Home/HomeAdmin.jsx'
+import SearchDocument from './components/Client/SearchDocument/SearchDocument';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -15,6 +16,7 @@ root.render(
       <Routes>
         <Route path='/' element={<App />}/>
         <Route path='/client/home' element={<HomeClient />}/>
+        <Route path='/client/searchDocument' element={<SearchDocument />}/>
         <Route path='/employe' element={<HomeEmploye />}/>
         <Route path='/admin' element={<HomeAdmin />}/>
         <Route path='/deconnect' element={<App />}/>

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 
 const headerClient = {
@@ -28,11 +28,7 @@ const headerAdmin = {
     deconnect: 'Déconnecter'
 }
 
-export default function Header({ headerFor }){
-
-
-
-
+export default function Header({ headerFor, clients}){
 
     const header = () => {
         if(headerFor === 'client' ){
@@ -47,7 +43,8 @@ export default function Header({ headerFor }){
         (field) => {
             return (
                 <>
-                    <Link to={"/"+field}>{header[field]}</Link> | { " " }
+                    <Link to={"/client/"+field} state={{client: clients,}}>
+                        {header[field]}</Link> | { " " }
                 </>
             );
         }
@@ -62,7 +59,7 @@ export default function Header({ headerFor }){
             paddingBottom: "1rem",
           }}
         >
-        
+        {console.log(clients)}
         {header()}
         </nav>
       </div>
