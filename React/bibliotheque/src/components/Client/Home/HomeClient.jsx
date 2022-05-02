@@ -4,6 +4,8 @@ import {useLocation} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import ClientDataService from "../../../Service/ClientDataService";
 import EditClient from "./EditClient";
+import { AiFillCheckCircle, AiOutlineConsoleSql } from "react-icons/ai";
+import { ImCross } from "react-icons/im"
  
 const columnsClient = (handleButtonClick) => [ 
     {          
@@ -38,8 +40,8 @@ const columnsClient = (handleButtonClick) => [
         selector: row => row.phoneNumber,
     },
     {
-        name: 'birthday',
-        selector: row => Date(row.bitrhday),
+        name: 'Anniversaire',
+        selector: row => row.bitrhday,
     },
     {
         name: 'Solde',
@@ -67,51 +69,111 @@ const columnsBill = [
     },
 ];
 
-const columnsBorrowDocs = [
+export const columnsBorrowDocs = [
     {
         name: 'id',
         selector: row => row.id,
         omit: true,
     },
     {
-        name: 'document',
+        name: 'Document',
         selector: row => row.document,
         omit: true,
     },
     {
         name: "Date d'emprunt",
         selector: row => row.dateBorrowing,
+        sortable: true,
         
     },
     {
-        name: 'Date de retour prévue',
+        name: 'Retour prêvu le',
         selector: row => row.dateReturn,
+        sortable: true,
+    },
+    {
+        
+        name: 'Jour de retard',
+        selector: row => {
+            let dateNow = new Date().getTime();
+            let difference = Math.abs(dateNow - new Date(row.dateReturn).getTime());
+            let dayToMilisecond = 86400000
+            let daysLate = Math.trunc(difference/dayToMilisecond);
+
+
+            if( new Date() > new Date(row.dateReturn)){
+                return daysLate;
+            } else return "/";
+            
+        },
+        sortable: true,
+    },
+    {
+        name: 'Retourné',
+        selector: (row) => {
+            if(row.returned == false){
+                return <ImCross style={{color: 'red'}} size={30}/>
+            }else {
+                return <AiFillCheckCircle style={{color: 'green'}} size={30}/>
+            }
+        },
+    },
+];
+
+export const columnsDocuments = [
+    {
+        name: 'id',
+        selector: row => row.id,
+        omit: true,
+    },
+    {
+        name: 'Type',
+        selector: row => row.type,
+        sortable: true,
+    },
+    {
+        name: "Titre",
+        selector: row => row.title,
+        sortable: true,
+        
+    },
+    {
+        name: 'Autheur',
+        selector: row => row.author,
+        sortable: true,
+    },
+    {
+        
+        name: 'Editor',
+        selector: row => row.editor,
+        sortable: true,
+    },
+    {
+        name: 'date de publication',
+        selector: (row) => row.dateOfPublication,
+        sortable: true,
+    },
+    {
+        name: 'Nombre de page',
+        selector: (row) => row.numberPage,
+        sortable: true,
+    },
+    {
+        name: 'Exemplaire',
+        selector: (row) => row.exemplary,
+        sortable: true,
         conditionalCellStyles:[
             {
                 when: row => {
-                    const date = new Date(row.dateReturn)
-                    if(date < Date.now()){
+                    if(row.exemplary > 1){
                       return true;        
                     } 
                   },
                 style: {
-                  backgroundColor: 'red',
+                  disabled: 'true',
                 },
             },
         ]
-    },
-    {
-        
-        name: 'Jours de retard',
-        selector: row => row.lateReturnDay,
-    },
-    {
-        name: 'Retourné',
-        selector: (row) => { 
-            if(row.returned){
-                return "true";
-            } else return "false";
-        }
     },
 ];
 

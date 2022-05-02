@@ -29,6 +29,10 @@ class UserDataService {
         return axios.post(`${API_URL}` +id+`/client/editBorrow`, borrowDocs);
     }
 
+    addBorrowDocs(borrowDocs, id){
+        return axios.post(`${API_URL}` +id+`/client/addBorrows`, borrowDocs);
+    }
+
 
 
 }

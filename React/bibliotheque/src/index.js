@@ -9,6 +9,7 @@ import HomeEmploye from './components/Employe/Home/HomeEmploye.jsx'
 import HomeAdmin from './components/Admin/Home/HomeAdmin.jsx'
 import SearchDocuments from './components/Client/SearchDocuments/SearchDocuments';
 import BorrowDocuments from './components/Client/BorrowDocuments/BorrowDocuments';
+import Bills from './components/Client/Bills/Bills';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -19,6 +20,7 @@ root.render(
         <Route path='/client/home' element={<HomeClient />}/>
         <Route path='/client/searchDocuments' element={<SearchDocuments />}/>
         <Route path='/client/borrowDocs' element={<BorrowDocuments />}/>
+        <Route path='/client/bills' element={<Bills />}/>
         <Route path='/employe' element={<HomeEmploye />}/>
         <Route path='/admin' element={<HomeAdmin />}/>
         <Route path='/client/deconnect' element={<App />}/>

@@ -1,13 +1,14 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import ClientDataService from "../../../Service/ClientDataService";
 import Header from "../../Header/Header"
 import DataTable from 'react-data-table-component';
-import { AiFillCheckCircle } from "react-icons/ai";
+import { AiFillCheckCircle, AiOutlineConsoleSql } from "react-icons/ai";
 import { ImCross } from "react-icons/im"
-import { columnsDocuments } from "../SearchDocuments/SearchDocuments";
+import { columnsDocuments } from "../Home/HomeClient";
+import { columnsBorrowDocs } from "../Home/HomeClient";
 
 
 const useFetch = (id) => {
@@ -23,52 +24,6 @@ const useFetch = (id) => {
 
     return [data, fetchData];
 };
-
-const columnsBorrowDocs = [
-    {
-        name: 'id',
-        selector: row => row.id,
-        omit: true,
-    },
-    {
-        name: 'Document',
-        selector: row => row.document,
-        omit: true,
-    },
-    {
-        name: "Date d'emprunt",
-        selector: row => row.dateBorrowing,
-        sortable: true,
-        
-    },
-    {
-        name: 'Retour prêvu le',
-        selector: row => row.dateReturn,
-        sortable: true,
-    },
-    {
-        
-        name: 'Jour de retard',
-        selector: row => {
-            var difference= Math.abs(new Date(row.dateReturn)-new Date(row.dateBorrowing));
-            let days = difference/(1000 * 3600 * 24)
-            return days;
-        },
-        sortable: true,
-    },
-    {
-        name: 'Retourné',
-        selector: (row) => {
-            if(row.returned == false){
-                return <ImCross style={{color: 'red'}} size={30}/>
-            }else {
-                return <AiFillCheckCircle style={{color: 'green'}} size={30}/>
-            }
-        },
-    },
-];
-
-const columnsDocs = columnsDocuments.filter( row => row.name != 'Emprunter');
 
 const customStyles = {
     header: {
@@ -106,12 +61,13 @@ export default function BorrowDocuments(){
     <pre style={{'width': 1000+'px', 'paddingLeft': '20px'}}>
         <h3>Document :</h3>
         <DataTable 
-            columns={columnsDocs}
+            columns={columnsDocuments}
             data={[data.document]}
             customStyles={customStyles}
         
         />
         <hr/>
+        
     </pre>;
   
     const handleChange = ({ selectedRows }) => {
@@ -120,8 +76,12 @@ export default function BorrowDocuments(){
         }));
     };
 
+
+    /* 
+        TO DO : Ajouter exemplaire de document losrqu'il est retourné.
+
+    */
     const handleReturnBorrowDocs = () => {
-        console.log(selectedRows);
         ClientDataService.returnBorrowDocs(selectedRows);
         setSelectedRows(false);
         setToggleClearRows(!toggledClearRows);
@@ -136,34 +96,35 @@ export default function BorrowDocuments(){
                     clients={client}
                 />
             </div>
-
-
             {
                 borrowDocs &&
                 <div className="containerBorrowDocs">                    
                 <br/><br/>
-                <h2> List d'emprunts</h2>
-                        
-                        <DataTable
-                            columns={columnsBorrowDocs}
-                            data={borrowDocs}
-                            selectableRows
-                            selectableRowDisabled={rowDisabledCriteria}
-                            onSelectedRowsChange={handleChange}
-                            clearSelectedRows={toggledClearRows}
-                            expandableRows
-                            expandableRowsComponent={ExpandedComponent}
-                            striped
-                            pagination
-                        />
+                <h2> List d'emprunts</h2>        
+                    <DataTable
+                        columns={columnsBorrowDocs}
+                        data={borrowDocs}
+                        selectableRows
+                        selectableRowDisabled={rowDisabledCriteria}
+                        onSelectedRowsChange={handleChange}
+                        clearSelectedRows={toggledClearRows}
+                        expandableRows
+                        expandableRowsComponent={ExpandedComponent}
+                        striped
+                        pagination
+                    />
 
-                        {selectedRows != false && 
-                            <button onClick={handleReturnBorrowDocs}>
-                                Retourné Emprunt
-                            </button>
-                        }
-                
+                    {selectedRows != false && 
+                        <button onClick={handleReturnBorrowDocs}>
+                            Retourné Emprunt
+                        </button>
+                    }
+            
+                    <br/><br/>
+                    <Link to={"/client/searchDocuments"} state={{client: client,}}>Emprunter un Document</Link> 
+                       
                 </div>
+                
                 
             }
         </>

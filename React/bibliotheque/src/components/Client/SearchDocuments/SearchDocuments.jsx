@@ -6,71 +6,9 @@ import DataTable from 'react-data-table-component';
 import ClientDataService from "../../../Service/ClientDataService"; 
 
 import FormSearchDoc from "./FormSearchDoc";
+import { columnsDocuments } from "../Home/HomeClient";
 
-export const columnsDocuments = [
-    {
-        name: 'id',
-        selector: row => row.id,
-        omit: true,
-    },
-    {
-        name: 'Type',
-        selector: row => row.type,
-        sortable: true,
-    },
-    {
-        name: "Titre",
-        selector: row => row.title,
-        sortable: true,
-        
-    },
-    {
-        name: 'Autheur',
-        selector: row => row.author,
-        sortable: true,
-    },
-    {
-        
-        name: 'Editor',
-        selector: row => row.editor,
-        sortable: true,
-    },
-    {
-        name: 'date de publication',
-        selector: (row) => row.dateOfPublication,
-        sortable: true,
-    },
-    {
-        name: 'Nombre de page',
-        selector: (row) => row.numberPage,
-        sortable: true,
-    },
-    {
-        name: 'Exemplaire',
-        selector: (row) => row.exemplary,
-        sortable: true,
-        conditionalCellStyles:[
-            {
-                when: row => {
-                    if(row.exemplary > 1){
-                      return true;        
-                    } 
-                  },
-                style: {
-                  disabled: 'true',
-                },
-            },
-        ]
-    },
-    {          
-        name:"Emprunter",
-        cell: (row) => row.exemplary > 1 && <button> Emprunter</button>,
-        ignoreRowClick: true,
-        allowOverflow: true,
-        button: true,
-    
-    },
-];
+
 
 const useFetch = (id) => {
     const [data, setData] = useState(null);
@@ -89,9 +27,10 @@ const useFetch = (id) => {
 };
 
 export default function SearchDocuments(){ 
-
     const dataClient = useLocation().state.client;
     const [client, setClient] = React.useState(dataClient);
+    const [selectedRows, setSelectedRows] = React.useState(false);
+    const [toggledClearRows, setToggleClearRows] = React.useState(false);
 
     const [searchBar, setSearchBar] = useState({
         type: "all",
@@ -101,8 +40,11 @@ export default function SearchDocuments(){
         genre: 'false',
         research: ''
     });
-
     const [documents, fetchData] = useFetch(client[0].id);
+    
+    
+    
+    const rowDisabledCriteria = row => row.exemplary <= 1;
 
     const handleChangeSearchBar = (event) => {
         event.preventDefault();
@@ -120,8 +62,29 @@ export default function SearchDocuments(){
         fetchData(searchBar);
     };
 
+    const handleChangeBorrow = ({ selectedRows }) => {
+        setSelectedRows(selectedRows.map(row => {      
+            let day = new Date().getUTCDate();
+            let month = new Date().getMonth();
+            let year = new Date().getUTCFullYear();
+            return {
+                id: '',
+                client: client[0],
+                document: row,
+            }
+        }));
+    };
 
+    const handleBorrow = () => {
+        ClientDataService.addBorrowDocs(selectedRows, client[0].id)
+        console.log(selectedRows)
+        setSelectedRows(false);
+        setToggleClearRows(!toggledClearRows);    
+      }
+
+      
     return(
+        
         <>
             <Header
                 headerFor={'client'}
@@ -143,10 +106,23 @@ export default function SearchDocuments(){
                         <DataTable
                             columns={columnsDocuments}
                             data={documents}
+                            selectableRows
+                            selectableRowDisabled={rowDisabledCriteria}
+                            onSelectedRowsChange={handleChangeBorrow}
+                            clearSelectedRows={toggledClearRows}
                             striped
                             pagination
                             defaultSortFieldId={2}
                         />
+                    </div>
+                    <div>
+                    {
+                        (selectedRows != false) &&
+                            <button onClick={handleBorrow}>
+                            Emprunter
+                            </button> 
+                            
+                    }
                     </div>
                 </>
             }
