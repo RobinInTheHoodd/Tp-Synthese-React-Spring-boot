@@ -104,6 +104,7 @@ export default function SearchDocuments(){
                     <br/><br/>
                     <div className="container_document">                    
                         <DataTable
+                            title={"Documents :"}
                             columns={columnsDocuments}
                             data={documents}
                             selectableRows

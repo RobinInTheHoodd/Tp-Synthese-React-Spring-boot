@@ -12,6 +12,10 @@ class UserDataService {
         return axios.get(`${API_URL}` +id+`/client/getBills`);
     }
 
+    addBill(bill, id){
+        return axios.post(`${API_URL}` +id+`/client/addBills`, bill);
+    }
+
     getDocuments(id){
         return axios.get(`${API_URL}` +id+`/client/getDocsDto`);
     }

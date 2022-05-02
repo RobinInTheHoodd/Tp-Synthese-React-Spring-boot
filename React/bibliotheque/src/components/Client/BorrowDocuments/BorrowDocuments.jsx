@@ -20,7 +20,7 @@ const useFetch = (id) => {
         const json = await response.data;
         setData(json);
     }
-    useEffect(() => {fetchData()},[data]);
+    useEffect(() => {fetchData()},[]);
 
     return [data, fetchData];
 };
@@ -100,8 +100,8 @@ export default function BorrowDocuments(){
                 borrowDocs &&
                 <div className="containerBorrowDocs">                    
                 <br/><br/>
-                <h2> List d'emprunts</h2>        
                     <DataTable
+                        title={"List d'emprunts :"}
                         columns={columnsBorrowDocs}
                         data={borrowDocs}
                         selectableRows

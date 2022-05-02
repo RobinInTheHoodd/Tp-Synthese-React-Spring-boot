@@ -49,7 +49,7 @@ const columnsClient = (handleButtonClick) => [
     },
 ];
 
-const columnsBill = [
+export const columnsBill = [
     {
         name: 'id',
         selector: row => row.id,
