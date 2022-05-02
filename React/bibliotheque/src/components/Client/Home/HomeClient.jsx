@@ -95,15 +95,18 @@ export const columnsBorrowDocs = [
         
         name: 'Jour de retard',
         selector: row => {
+            
             let dateNow = new Date().getTime();
             let difference = Math.abs(dateNow - new Date(row.dateReturn).getTime());
             let dayToMilisecond = 86400000
             let daysLate = Math.trunc(difference/dayToMilisecond);
 
 
-            if( new Date() > new Date(row.dateReturn)){
+            if( new Date() > new Date(row.dateReturn) && row.returned == false ){
                 row.lateReturnDay = daysLate;
                 return daysLate;
+            } else if (row.lateReturnDay != 0){
+                return row.lateReturnDay;   
             } else return "/";
             
         },

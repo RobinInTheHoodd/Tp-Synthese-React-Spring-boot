@@ -93,6 +93,7 @@ export default function BorrowDocuments(){
     const contextActions = React.useMemo(() => {
         
         const handleReturnBorrowDocs = () => {
+            console.log(selectedRows);
             ClientDataService.returnBorrowDocs(selectedRows).then(
                 () =>{
                     setSelectedRows(false);
