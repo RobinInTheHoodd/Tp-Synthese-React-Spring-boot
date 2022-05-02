@@ -102,6 +102,7 @@ export const columnsBorrowDocs = [
 
 
             if( new Date() > new Date(row.dateReturn)){
+                row.lateReturnDay = daysLate;
                 return daysLate;
             } else return "/";
             

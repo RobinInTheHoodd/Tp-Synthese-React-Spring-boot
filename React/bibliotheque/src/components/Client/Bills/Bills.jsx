@@ -55,10 +55,6 @@ export default function Bills() {
                 headerFor={'client'}
                 clients={client}
             />
-            
-
-
-            
             <div>
                 <br/><br/>
                 <h2>Factures :</h2>

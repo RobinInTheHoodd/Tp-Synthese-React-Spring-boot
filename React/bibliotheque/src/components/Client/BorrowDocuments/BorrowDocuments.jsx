@@ -20,7 +20,7 @@ const useFetch = (id) => {
         const json = await response.data;
         setData(json);
     }
-    useEffect(() => {fetchData()},[]);
+    useEffect(() => {fetchData()},[data]);
 
     return [data, fetchData];
 };
@@ -64,11 +64,25 @@ export default function BorrowDocuments(){
             columns={columnsDocuments}
             data={[data.document]}
             customStyles={customStyles}
-        
         />
         <hr/>
+        <br/>
+        {
+            data.lateReturnDay > 0 &&
+                <>
+                    <hr/>
+                    <h3>Solde du retard : {getSoldeLateReturn(data)}$</h3>  
+                    <hr/>
+                </>
+        }
+        <br/>
+        
         
     </pre>;
+
+    const getSoldeLateReturn = (data) => {
+        return data.lateReturnDay * 0.25;
+    }
   
     const handleChange = ({ selectedRows }) => {
         setSelectedRows(selectedRows.map(row => {
@@ -76,17 +90,23 @@ export default function BorrowDocuments(){
         }));
     };
 
-
-    /* 
-        TO DO : Ajouter exemplaire de document losrqu'il est retourné.
-
-    */
-    const handleReturnBorrowDocs = () => {
-        ClientDataService.returnBorrowDocs(selectedRows);
-        setSelectedRows(false);
-        setToggleClearRows(!toggledClearRows);
-        fetchData();
-      }
+    const contextActions = React.useMemo(() => {
+        
+        const handleReturnBorrowDocs = () => {
+            ClientDataService.returnBorrowDocs(selectedRows).then(
+                () =>{
+                    setSelectedRows(false);
+                    setToggleClearRows(!toggledClearRows);
+                    fetchData();
+                }
+            );
+        }
+        return(
+            <button onClick={handleReturnBorrowDocs}>
+                Retourné Emprunt
+            </button>
+        )
+    }, [borrowDocs, selectedRows, toggledClearRows])
 
     return(
         <>
@@ -105,6 +125,7 @@ export default function BorrowDocuments(){
                         columns={columnsBorrowDocs}
                         data={borrowDocs}
                         selectableRows
+                        contextActions={contextActions}
                         selectableRowDisabled={rowDisabledCriteria}
                         onSelectedRowsChange={handleChange}
                         clearSelectedRows={toggledClearRows}
@@ -113,13 +134,6 @@ export default function BorrowDocuments(){
                         striped
                         pagination
                     />
-
-                    {selectedRows != false && 
-                        <button onClick={handleReturnBorrowDocs}>
-                            Retourné Emprunt
-                        </button>
-                    }
-            
                     <br/><br/>
                     <Link to={"/client/searchDocuments"} state={{client: client,}}>Emprunter un Document</Link> 
                        

@@ -1,5 +1,5 @@
 import Header from "../../Header/Header"
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
 import React from "react";
 import DataTable from 'react-data-table-component';
@@ -42,9 +42,8 @@ export default function SearchDocuments(){
     });
     const [documents, fetchData] = useFetch(client[0].id);
     
-    
-    
     const rowDisabledCriteria = row => row.exemplary <= 1;
+
 
     const handleChangeSearchBar = (event) => {
         event.preventDefault();
@@ -74,14 +73,29 @@ export default function SearchDocuments(){
             }
         }));
     };
-
+    
+              
+    
     const handleBorrow = () => {
         ClientDataService.addBorrowDocs(selectedRows, client[0].id)
         console.log(selectedRows)
         setSelectedRows(false);
-        setToggleClearRows(!toggledClearRows);    
-      }
+        setToggleClearRows(!toggledClearRows);
+        return BorrowPages();
+    }
 
+
+    const navigate = useNavigate();
+    const BorrowPages = () => 
+    {
+        return navigate('/client/borrowDocs', 
+        {
+            replace: true,
+            state: {
+                client: client,
+            }        
+        }) 
+    };
       
     return(
         
