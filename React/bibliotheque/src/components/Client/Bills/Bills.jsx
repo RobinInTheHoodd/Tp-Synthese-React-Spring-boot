@@ -24,7 +24,7 @@ const useFetch = (id) => {
 
 export default function Bills() {
 
-    const dataClient = useLocation().state.client;
+    const dataClient = useLocation().state.user;
     const [client, setClient] = React.useState(dataClient);
     const [bills, fetchData] = useFetch(client[0].id);
 
@@ -53,7 +53,7 @@ export default function Bills() {
         <div>
             <Header 
                 headerFor={'client'}
-                clients={client}
+                user={client}
             />
             <div>
                 <br/><br/>

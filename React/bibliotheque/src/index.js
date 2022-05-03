@@ -10,6 +10,7 @@ import HomeAdmin from './components/Admin/Home/HomeAdmin.jsx'
 import SearchDocuments from './components/Client/SearchDocuments/SearchDocuments';
 import BorrowDocuments from './components/Client/BorrowDocuments/BorrowDocuments';
 import Bills from './components/Client/Bills/Bills';
+import Clients from './components/Employe/Clients/Clients';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -22,7 +23,7 @@ root.render(
         <Route path='/client/borrowDocs' element={<BorrowDocuments />}/>
         <Route path='/client/bills' element={<Bills />}/>
         <Route path='/employe/home' element={<HomeEmploye />}/>
-        <Route path='/employe/clients' element={<HomeEmploye />}/>
+        <Route path='/employe/clients' element={<Clients />}/>
         <Route path='/employe/deconnect' element={<App />}/>
         <Route path='/admin' element={<HomeAdmin />}/>
         <Route path='/client/deconnect' element={<App />}/>

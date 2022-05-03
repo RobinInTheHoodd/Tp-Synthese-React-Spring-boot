@@ -54,7 +54,7 @@ export default function Login({dataClient}){
         {
             replace: true,
             state: {
-                client: [selectedRows],
+                user: [selectedRows],
             }        
         }), [navigate]
     });          
@@ -66,7 +66,7 @@ export default function Login({dataClient}){
         {
             replace: true,
             state: {
-                employe: [selectedRows],
+                user: [selectedRows],
             }
         }), [navigate]
     });

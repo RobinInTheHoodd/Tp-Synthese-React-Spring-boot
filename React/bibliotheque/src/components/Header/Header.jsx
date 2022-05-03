@@ -28,7 +28,7 @@ const headerAdmin = {
     deconnect: 'Déconnecter'
 }
 
-export default function Header({ headerFor, clients}){
+export default function Header({ headerFor, user}){
 
     const header = () => {
         if(headerFor === 'client' ){
@@ -43,7 +43,7 @@ export default function Header({ headerFor, clients}){
         (field) => {
             return (
                 <>
-                    <Link to={"/"+headerFor+"/"+field} state={{client: clients,}}>
+                    <Link to={"/"+headerFor+"/"+field} state={{user: user,}}>
                         {header[field]}</Link> | { " " }
                 </>
             );

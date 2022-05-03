@@ -48,7 +48,7 @@ const customStyles = {
 };
 
 export default function BorrowDocuments(){
-    const dataClient = useLocation().state.client;
+    const dataClient = useLocation().state.user;
     const [client, setClient] = React.useState(dataClient);
     const [borrowDocs, fetchData] = useFetch(client[0].id);
     const [selectedRows, setSelectedRows] = React.useState(false);
@@ -114,7 +114,7 @@ export default function BorrowDocuments(){
             <div>
                 <Header 
                     headerFor={'client'} 
-                    clients={client}
+                    user={client}
                 />
             </div>
             {

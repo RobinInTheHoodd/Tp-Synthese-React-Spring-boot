@@ -203,7 +203,7 @@ const customStyles = {
 
 
 export default function HomeClient({}){
-    const dataClient = useLocation().state.client;
+    const dataClient = useLocation().state.user;
 
     const [client, setClient] = React.useState(dataClient);
     const [editClient, setEditClient] = React.useState(false);
@@ -275,7 +275,7 @@ export default function HomeClient({}){
         <>
             <Header 
                 headerFor={'client'}
-                clients={client}
+                user={client}
             />
             <div>
                 <br/><br/>

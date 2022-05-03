@@ -27,7 +27,7 @@ const useFetch = (id) => {
 };
 
 export default function SearchDocuments(){ 
-    const dataClient = useLocation().state.client;
+    const dataClient = useLocation().state.user;
     const [client, setClient] = React.useState(dataClient);
     const [selectedRows, setSelectedRows] = React.useState(false);
     const [toggledClearRows, setToggleClearRows] = React.useState(false);
@@ -92,7 +92,7 @@ export default function SearchDocuments(){
         {
             replace: true,
             state: {
-                client: client,
+                user: client,
             }        
         }) 
     };
@@ -102,7 +102,7 @@ export default function SearchDocuments(){
         <>
             <Header
                 headerFor={'client'}
-                clients={client}
+                user={client}
             />
             <br/><br/><br/><br/>
 

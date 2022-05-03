@@ -46,7 +46,7 @@ const columnsEmploye = (handleButtonClick) => [
 
 export default function HomeEmploye(){
 
-    const dataEmploye = useLocation().state.employe;
+    const dataEmploye = useLocation().state.user;
     const [employe, setEmploye] = React.useState(dataEmploye);
 
     const [editEmploye, setEditEmploye] = React.useState(false);
@@ -88,7 +88,10 @@ export default function HomeEmploye(){
     return(
         <>
         
-            <Header headerFor={'employe'}/>
+            <Header 
+                headerFor={'employe'}
+                user={employe}
+            />
             <div>
                 {employe &&
                     <>
