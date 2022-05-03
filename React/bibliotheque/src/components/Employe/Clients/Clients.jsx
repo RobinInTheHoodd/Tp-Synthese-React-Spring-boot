@@ -4,11 +4,12 @@ import {useLocation} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import ClientDataService from "../../../Service/ClientDataService";
 import EditClient from "../../Client/Home/EditClient"
-import { AiFillCheckCircle, AiOutlineConsoleSql } from "react-icons/ai";
-import { ImCross } from "react-icons/im"
+import { AiFillCheckCircle, AiFillPlusCircle } from "react-icons/ai";
+import { ImCross } from "react-icons/im";
+import { BsFillTrashFill } from "react-icons/bs";
 import EmployeDateService from "../../../Service/EmployeDateService";
  
-const columnsClient = (handleButtonClick, handleButtonBorrows, handleButtonBills) => [ 
+const columnsClient = (handleButtonClick, handleButtonBorrows, handleButtonBills, handleButtonDelete) => [ 
     {          
         cell: (row) => <button onClick={() => handleButtonClick(row)}>Modifier</button>,
         name: 'Modification',
@@ -65,6 +66,13 @@ const columnsClient = (handleButtonClick, handleButtonBorrows, handleButtonBills
     {          
         cell: (row) => <button onClick={() => handleButtonBills(row)}>Factures</button>,
         name: 'Factures',
+        ignoreRowClick: true,
+        allowOverflow: true,
+        button: true,
+    },
+    {          
+        cell: (row) => <BsFillTrashFill onClick={() => handleButtonDelete(row)} style={{'color': 'red'}} size={20}/>,
+        name: 'Supprimer',
         ignoreRowClick: true,
         allowOverflow: true,
         button: true,
@@ -223,6 +231,25 @@ const customStyles = {
     },
 };
 
+const modelAddress = {
+    houseNumber: '',
+    streetAddress: '',
+    city: '',
+    state: '',
+    zipCode: ''
+};
+
+const modelClient = {
+    id: '',
+    firstName : '',
+    secondName: '',
+    password: '',
+    bitrhday: '',
+    phoneNumber: '',
+    email: '',
+    address: modelAddress 
+};
+
 
 const useFetch = (id) => {
     const [data, setData] = useState(false);
@@ -246,6 +273,7 @@ export default function Clients({}){
     const [employe, setEmploye] = useState(dataEmploye);
     const [client, fetchData] = useFetch(employe[0].id)
     const [editClient, setEditClient] = useState(false);
+    const [newClient, setNewClient] = useState(false);
     const [borrowDocsClient, setborrowDocsClient ] = useState(false);
     const [billsClient, setBillsClient ] = useState(false);
 
@@ -257,7 +285,7 @@ export default function Clients({}){
 
 
 
-    const handleChangeNewClient = (event) => {
+    const handleChangeEditClient = (event) => {
         event.preventDefault();
         const name = event.target.name;
         const value = event.target.value;
@@ -265,7 +293,7 @@ export default function Clients({}){
         setEditClient(editClient => ({...editClient, [name]: value}));
     }
 
-    const handleChangeAddressNewClient = (event) => {
+    const handleChangeAddressEditClient = (event) => {
         const name = event.target.name.split(".")[1];
         const address = event.target.name.split(".")[0];
         const value = event.target.value;
@@ -273,8 +301,7 @@ export default function Clients({}){
             [address]: {...editClient.address, [name]: value}});        
     }
 
-    
-    const handleSubmitNewClient = (event) => {
+    const handleSubmitEditClient = (event) => {
         event.preventDefault();
         
         EmployeDateService.updateClient(editClient, employe[0].id).
@@ -309,18 +336,56 @@ export default function Clients({}){
         
        
     }
-
-        
+    
     const handleButtonBills = (row) =>{
         
        
+    }
+
+    const handleButtonDelete = (row) =>{
+        EmployeDateService.deleteClient({idClient: row.id}, employe[0].id)
+        .then(
+            () => fetchData(employe[0].id)
+        );
     }
 
     const handleButtonCancel = () => {
         setEditClient(false);
         setborrowDocsClient(false);
         setBillsClient(false);
+        setNewClient(false);
     }
+
+
+    const handleButtonNewClient = () => {
+        setNewClient(modelClient);
+    }
+
+    const handleChangeNewClient = (event) => {
+        event.preventDefault();
+        const name = event.target.name;
+        const value = event.target.value;
+        
+        setNewClient(newClient => ({...newClient, [name]: value}));
+    }
+    
+    const handleChangeAddressNewClient = (event) => {
+        const name = event.target.name.split(".")[1];
+        const address = event.target.name.split(".")[0];
+        const value = event.target.value;
+        setNewClient({...newClient,
+            [address]: {...newClient.address, [name]: value}});        
+    }
+
+    const handleSubmitNewClient = (event) => {
+        event.preventDefault();
+        EmployeDateService.createClient(newClient, employe[0].id).
+        then(
+            () => handleButtonCancel()
+        );
+    };
+
+    
 
     
     return(
@@ -334,8 +399,9 @@ export default function Clients({}){
                 <div>
                 <br/><br/>
                 <h1> Compte Client : </h1>
+                <AiFillPlusCircle onClick={() => handleButtonNewClient()} style={{'paddingLeft': '14px'}} size={40}/>
                 <DataTable
-                    columns={columnsClient(handleButtonClick, handleButtonBorrows, handleButtonBills)}
+                    columns={columnsClient(handleButtonClick, handleButtonBorrows, handleButtonBills, handleButtonDelete)}
                     data={client}
                     customStyles={customStyles}
                     pagination
@@ -348,9 +414,9 @@ export default function Clients({}){
                             <div className="container"> 
                             <ImCross onClick={() => handleButtonCancel()} style={{'color': 'red'}}/>
                                 <EditClient 
-                                    handleChange={handleChangeNewClient}
-                                    handleSubmit={handleSubmitNewClient}
-                                    handleChangeAddress={handleChangeAddressNewClient}
+                                    handleChange={handleChangeEditClient}
+                                    handleSubmit={handleSubmitEditClient}
+                                    handleChangeAddress={handleChangeAddressEditClient}
                                     handleCancel={handleButtonCancel}
                                     client={editClient}
                                 />
@@ -376,6 +442,16 @@ export default function Clients({}){
                                 />
                             </div>   
                         </>
+                    }
+                    {newClient &&
+                        <EditClient
+                            handleChange={handleChangeNewClient}
+                            handleChangeAddress={handleChangeAddressNewClient}
+                            handleSubmit={handleSubmitNewClient}
+                            handleCancel={handleButtonCancel}
+                            client={newClient}
+                        />
+
                     }
                 </div>
                 <br/><br/>

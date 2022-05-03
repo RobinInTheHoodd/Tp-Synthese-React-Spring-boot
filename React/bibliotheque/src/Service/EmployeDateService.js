@@ -13,6 +13,12 @@ class EmployeDataService {
     getClients(id){
         return axios.get(`${API_URL}` +id+`/employe/getClients`);
     }
+    deleteClient(client, id){
+        return axios.post(`${API_URL}` +id+`/employe/deleteClient`, client);
+    }
+    createClient(client, id){
+        return axios.post(`${API_URL}` +id+`/employe/createClient`, client);
+    }
     updateClient(client, id){
         return axios.post(`${API_URL}` +id+`/employe/editClient`, client);
     }

@@ -63,9 +63,6 @@ export default function SearchDocuments(){
 
     const handleChangeBorrow = ({ selectedRows }) => {
         setSelectedRows(selectedRows.map(row => {      
-            let day = new Date().getUTCDate();
-            let month = new Date().getMonth();
-            let year = new Date().getUTCFullYear();
             return {
                 id: '',
                 client: client[0],
