@@ -240,8 +240,16 @@ export default function HomeClient({}){
         const name = event.target.name;
         const value = event.target.value;
         setEditClient(editClient => ({...editClient, [name]: value}));
-        console.log(editClient);
     }
+
+    const handleChangeAddressNewClient = (event) => {
+        const name = event.target.name.split(".")[1];
+        const address = event.target.name.split(".")[0];
+        const value = event.target.value;
+        setEditClient({...editClient,
+            [address]: {...editClient.address, [name]: value}});        
+    }
+
     
     const handleSubmitNewClient = (event) => {
         event.preventDefault();
@@ -284,6 +292,7 @@ export default function HomeClient({}){
                             <EditClient 
                                 handleChange={handleChangeNewClient}
                                 handleSubmit={handleSubmitNewClient}
+                                handleChangeAddress={handleChangeAddressNewClient}
                                 client={editClient}
                             />
                         </div>    

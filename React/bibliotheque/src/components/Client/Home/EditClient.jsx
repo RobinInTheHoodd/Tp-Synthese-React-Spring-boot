@@ -2,7 +2,7 @@
 import FormAdress from "./EditClientAddress";
 import React from "react";
 
-export default function EditClient({handleSubmit, handleChange, client}) {
+export default function EditClient({handleSubmit, handleChange, handleChangeAddress, client}) {
 
     
     return (
@@ -65,7 +65,7 @@ export default function EditClient({handleSubmit, handleChange, client}) {
                     <br></br>
                     <FormAdress 
                         client={client}
-                        handleChange={handleChange}
+                        handleChange={handleChangeAddress}
                     />
 
                     <br></br>
