@@ -9,9 +9,9 @@ import { ImCross } from "react-icons/im";
 import { BsFillTrashFill } from "react-icons/bs";
 import EmployeDateService from "../../../Service/EmployeDateService";
  
-const columnsClient = (handleButtonClick, handleButtonBorrows, handleButtonBills, handleButtonDelete) => [ 
+const columnsClient = (handleButtonEditClient, handleButtonBorrows, handleButtonBills, handleButtonDeleteClient) => [ 
     {          
-        cell: (row) => <button onClick={() => handleButtonClick(row)}>Modifier</button>,
+        cell: (row) => <button onClick={() => handleButtonEditClient(row)}>Modifier</button>,
         name: 'Modification',
         ignoreRowClick: true,
         allowOverflow: true,
@@ -71,7 +71,7 @@ const columnsClient = (handleButtonClick, handleButtonBorrows, handleButtonBills
         button: true,
     },
     {          
-        cell: (row) => <BsFillTrashFill onClick={() => handleButtonDelete(row)} style={{'color': 'red'}} size={20}/>,
+        cell: (row) => <BsFillTrashFill onClick={() => handleButtonDeleteClient(row)} style={{'color': 'red'}} size={20}/>,
         name: 'Supprimer',
         ignoreRowClick: true,
         allowOverflow: true,
@@ -284,7 +284,6 @@ export default function Clients({}){
     }, []);
 
 
-
     const handleChangeEditClient = (event) => {
         event.preventDefault();
         const name = event.target.name;
@@ -293,7 +292,7 @@ export default function Clients({}){
         setEditClient(editClient => ({...editClient, [name]: value}));
     }
 
-    const handleChangeAddressEditClient = (event) => {
+    const handleChangeEditClientAddress = (event) => {
         const name = event.target.name.split(".")[1];
         const address = event.target.name.split(".")[0];
         const value = event.target.value;
@@ -313,7 +312,7 @@ export default function Clients({}){
         setEditClient(false);
     };
     
-    const handleButtonClick = (row) => {
+    const handleButtonEditClient = (row) => {
         setEditClient(row);
         EmployeDateService.getBorrowsDocByIdClient({id: row.id}, employe[0].id).
         then(
@@ -342,7 +341,7 @@ export default function Clients({}){
        
     }
 
-    const handleButtonDelete = (row) =>{
+    const handleButtonDeleteClient = (row) =>{
         EmployeDateService.deleteClient({idClient: row.id}, employe[0].id)
         .then(
             () => fetchData(employe[0].id)
@@ -356,7 +355,6 @@ export default function Clients({}){
         setNewClient(false);
     }
 
-
     const handleButtonNewClient = () => {
         setNewClient(modelClient);
     }
@@ -369,7 +367,7 @@ export default function Clients({}){
         setNewClient(newClient => ({...newClient, [name]: value}));
     }
     
-    const handleChangeAddressNewClient = (event) => {
+    const handleChangeNewClientAddress = (event) => {
         const name = event.target.name.split(".")[1];
         const address = event.target.name.split(".")[0];
         const value = event.target.value;
@@ -394,14 +392,14 @@ export default function Clients({}){
                 headerFor={'employe'}
                 user={employe}
             />
+            <h1> Compte Client : </h1>
+            <AiFillPlusCircle onClick={() => handleButtonNewClient()} style={{'paddingLeft': '14px', 'cursor': 'pointer'}} size={40}/>
             {
                 client && 
                 <div>
                 <br/><br/>
-                <h1> Compte Client : </h1>
-                <AiFillPlusCircle onClick={() => handleButtonNewClient()} style={{'paddingLeft': '14px'}} size={40}/>
                 <DataTable
-                    columns={columnsClient(handleButtonClick, handleButtonBorrows, handleButtonBills, handleButtonDelete)}
+                    columns={columnsClient(handleButtonEditClient, handleButtonBorrows, handleButtonBills, handleButtonDeleteClient)}
                     data={client}
                     customStyles={customStyles}
                     pagination
@@ -412,11 +410,11 @@ export default function Clients({}){
                     {editClient &&
                         <>
                             <div className="container"> 
-                            <ImCross onClick={() => handleButtonCancel()} style={{'color': 'red'}}/>
+                            <ImCross onClick={() => handleButtonCancel()} style={{'color': 'red', 'cursor': 'pointer'}}/>
                                 <EditClient 
                                     handleChange={handleChangeEditClient}
                                     handleSubmit={handleSubmitEditClient}
-                                    handleChangeAddress={handleChangeAddressEditClient}
+                                    handleChangeAddress={handleChangeEditClientAddress}
                                     handleCancel={handleButtonCancel}
                                     client={editClient}
                                 />
@@ -446,7 +444,7 @@ export default function Clients({}){
                     {newClient &&
                         <EditClient
                             handleChange={handleChangeNewClient}
-                            handleChangeAddress={handleChangeAddressNewClient}
+                            handleChangeAddress={handleChangeNewClientAddress}
                             handleSubmit={handleSubmitNewClient}
                             handleCancel={handleButtonCancel}
                             client={newClient}
