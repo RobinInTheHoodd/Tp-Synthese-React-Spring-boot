@@ -21,7 +21,7 @@ root.render(
         <Route path='/client/searchDocuments' element={<SearchDocuments />}/>
         <Route path='/client/borrowDocs' element={<BorrowDocuments />}/>
         <Route path='/client/bills' element={<Bills />}/>
-        <Route path='/employe' element={<HomeEmploye />}/>
+        <Route path='/employe/home' element={<HomeEmploye />}/>
         <Route path='/admin' element={<HomeAdmin />}/>
         <Route path='/client/deconnect' element={<App />}/>
       </Routes>

@@ -60,7 +60,18 @@ export default function Login({dataClient}){
     });          
 
     
-    const EmployePage = useCallback(() => navigate('/employe', {replace: true}), [navigate]);          
+    const EmployePage = useCallback(() => 
+    {
+        return navigate('/employe/home',
+        {
+            replace: true,
+            state: {
+                employe: [selectedRows],
+            }
+        }), [navigate]
+    });
+
+    
     const AdminPage = useCallback(() => navigate('/admin', {replace: true}), [navigate]);          
 
     const loginSubmit = () => {

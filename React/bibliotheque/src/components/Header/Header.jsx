@@ -43,7 +43,7 @@ export default function Header({ headerFor, clients}){
         (field) => {
             return (
                 <>
-                    <Link to={"/client/"+field} state={{client: clients,}}>
+                    <Link to={"/"+headerFor+"/"+field} state={{client: clients,}}>
                         {header[field]}</Link> | { " " }
                 </>
             );
