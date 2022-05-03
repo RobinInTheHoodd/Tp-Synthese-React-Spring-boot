@@ -10,6 +10,20 @@ class EmployeDataService {
     updateEmployeById(employe ,id){
         return axios.post(`${API_URL}` +id+`/employe/addBorrows`, employe);
     }
+    getClients(id){
+        return axios.get(`${API_URL}` +id+`/employe/getClients`);
+    }
+    updateClient(client, id){
+        return axios.post(`${API_URL}` +id+`/employe/editClient`, client);
+    }
+    getBorrowsDocByIdClient(idCLient, idEmploye){
+        return axios.post(`${API_URL}` +idEmploye+`/employe/getBorrowsClient`, idCLient);
+    }
+    getBillsByIdClient(idCLient, idEmploye){
+        return axios.post(`${API_URL}` +idEmploye+`/employe/getBillsClient`, idCLient);
+    }
+    
+
 
 
 

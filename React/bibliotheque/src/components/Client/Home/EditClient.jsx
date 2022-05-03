@@ -2,13 +2,13 @@
 import FormAdress from "./EditClientAddress";
 import React from "react";
 
-export default function EditClient({handleSubmit, handleChange, handleChangeAddress, client}) {
+export default function EditClient({handleSubmit, handleChange, handleChangeAddress, client, handleCancel}) {
 
     
     return (
         <>
             <form onSubmit={handleSubmit} id="formClient">
-                <p>Modification :</p>
+                <h1>Modification :</h1>
                 <br></br>
                 <label>Prénom :</label>
                     <input 
@@ -61,7 +61,7 @@ export default function EditClient({handleSubmit, handleChange, handleChangeAddr
                     
                     <br></br>
                     <br></br>
-                    <p>Address : </p>
+                    <h2>Address : </h2>
                     <br></br>
                     <FormAdress 
                         client={client}
@@ -71,6 +71,9 @@ export default function EditClient({handleSubmit, handleChange, handleChangeAddr
                     <br></br>
                     <br></br>
                 <input type="submit"/>
+                <br></br>
+                <br></br>
+                <button name="Cancel" onClick={handleCancel}> Cancel </button>
             </form>
         </>
       )
