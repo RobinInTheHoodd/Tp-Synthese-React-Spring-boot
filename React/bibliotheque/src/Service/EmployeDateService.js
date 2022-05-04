@@ -23,10 +23,16 @@ class EmployeDataService {
         return axios.post(`${API_URL}` +id+`/employe/editClient`, client);
     }
     getBorrowsDocByIdClient(idCLient, idEmploye){
-        return axios.post(`${API_URL}` +idEmploye+`/employe/getBorrowsClient`, idCLient);
+        return axios.post(`${API_URL}` +idEmploye+`/employe/getBorrowsClientId`, idCLient);
+    }
+    getBorrowsDoc(idEmploye){
+        return axios.get(`${API_URL}` +idEmploye+`/employe/getBorrowsClient`);
     }
     addBorrows(idEmploye, newBorrow){
         return axios.post(`${API_URL}` +idEmploye+`/employe/addBorrows`, newBorrow);
+    }
+    editBorrows(idEmploye, editBorrow){
+        return axios.post(`${API_URL}` +idEmploye+`/employe/editBorrow`, editBorrow);
     }
     getBillsByIdClient(idCLient, idEmploye){
         return axios.post(`${API_URL}` +idEmploye+`/employe/getBillsClient`, idCLient);

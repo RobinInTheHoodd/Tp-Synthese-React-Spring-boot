@@ -21,7 +21,7 @@ const Modal = ({ setIsOpen, data, title, submitBorrow}) => {
           </div>
           <div className={styles.modalActions}>
             <div className={styles.actionsContainer}>
-              <button className={styles.deleteBtn} onClick={() => submitBorrow()}>
+              <button className={styles.deleteBtn} onClick={submitBorrow}>
                 Ajouter
               </button>
               <button

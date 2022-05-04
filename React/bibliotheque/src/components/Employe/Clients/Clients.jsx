@@ -1,6 +1,6 @@
 import React,  { useEffect, useState } from "react";
 import Header from "../../Header/Header";
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import ClientDataService from "../../../Service/ClientDataService";
 import EditClient from "../../Client/Home/EditClient"
@@ -98,7 +98,6 @@ export const columnsBill = [
         selector: row => row.paidOn,
     },
 ];
-
 export const columnsBorrowDocs = [
     {
         name: 'id',
@@ -331,8 +330,18 @@ export default function Clients({}){
         );
     }
     
+    const navigate = useNavigate();
     const handleButtonBorrows = (row) =>{
         
+        return navigate('/employe/borrowDocs',
+            {
+                replace: true,
+                state: {
+                    user: employe,
+                    client: row,
+                }
+            })
+    
        
     }
     
@@ -383,7 +392,6 @@ export default function Clients({}){
         );
     };
 
-    
 
     
     return(

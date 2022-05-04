@@ -15,6 +15,7 @@ export default function FormSearchDoc({handleChange, handleSubmit, searchBar}) {
             type="checkbox" 
             name="title"
             value={searchBar.title}
+            checked={searchBar.title}
             onChange={handleChange}
           />
           </label>
@@ -23,6 +24,7 @@ export default function FormSearchDoc({handleChange, handleSubmit, searchBar}) {
             type="checkbox" 
             name="author" 
             value={searchBar.author}
+            checked={searchBar.author}
             onChange={handleChange}
           />
           </label>
@@ -31,6 +33,7 @@ export default function FormSearchDoc({handleChange, handleSubmit, searchBar}) {
             type="checkbox" 
             name="editor" 
             value={searchBar.editor}
+            checked={searchBar.editor}
             onChange={handleChange}
           />
           </label>
@@ -39,6 +42,7 @@ export default function FormSearchDoc({handleChange, handleSubmit, searchBar}) {
             type="checkbox" 
             name="genre" 
             value={searchBar.genre}
+            checked={searchBar.genre}
             onChange={handleChange}
           />
           </label>

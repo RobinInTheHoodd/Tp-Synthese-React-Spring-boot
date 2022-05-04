@@ -126,15 +126,16 @@ export default function SearchDocumentsEmploye() {
 
     const [searchBar, setSearchBar] = useState({
         type: "all",
-        title: 'false',
-        author: 'false',
-        editor: 'false',
-        genre: 'false',
+        title: false,
+        author: false,
+        editor: false,
+        genre: false,
         research: ''
     });
+
+
     const [toggledClearRows, setToggleClearRows] = React.useState(false);
     const [isOpenModalClient, setIsOpenModalClient] = useState(false);
-    const [newBorrow, setNewBorrow] = React.useState(false);
 
 
     const handleChangeSearchBar = (event) => {
@@ -142,12 +143,13 @@ export default function SearchDocumentsEmploye() {
         const name = event.target.name;
         const value = event.target.value;
         const check = event.target.checked;
-        if (name === 'research' || name === 'type') {
+        if (name == 'research' || name == 'type') {
             setSearchBar(values => ({...values, [name]: value}));
-        } else setSearchBar(values => ({...values, [name]: check.toString()}));
-
+        } else {
+            setSearchBar({...searchBar, [name]: check});
+        }
     }
-
+    
     const submitSearchBar = (event) => {
         event.preventDefault();
         fetchData(searchBar);
@@ -226,7 +228,6 @@ export default function SearchDocumentsEmploye() {
     }
 
     const submitNewBorrow = () => {
-        console.log(clientForBorrow);
         EmployeDateService.addBorrows(employe[0].id, {
             idClient: clientForBorrow[0].id,
             documents: documentsForBorrow
