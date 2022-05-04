@@ -1,15 +1,13 @@
 import Header from "../../Header/Header"
 import {useLocation, useNavigate} from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import React from "react";
+import React, {useEffect, useState} from 'react';
 import DataTable from 'react-data-table-component';
-import ClientDataService from "../../../Service/ClientDataService"; 
+import ClientDataService from "../../../Service/ClientDataService";
 import FormSearchDoc from "../../Client/SearchDocuments/FormSearchDoc";
 import FormDocument from "./FormDocument";
 import EmployeDateService from "../../../Service/EmployeDateService";
-import { BsFillTrashFill } from "react-icons/bs";
-import { AiFillPlusCircle } from "react-icons/ai";
-import Modal from "../../utils/Modal";
+import {BsFillTrashFill} from "react-icons/bs";
+import {AiFillPlusCircle} from "react-icons/ai";
 import ModalClients from "./ModalClients";
 
 const modelDocument = {
@@ -23,10 +21,8 @@ const modelDocument = {
     exemplary: '',
     genre: ''
 }
-
-
 export const columnsDocuments = (buttonEditDocument, buttonDeleteDocument) => [
-    {          
+    {
         cell: (row) => <button onClick={() => buttonEditDocument(row)}> Modifier</button>,
         name: 'Modifier',
         ignoreRowClick: true,
@@ -47,7 +43,7 @@ export const columnsDocuments = (buttonEditDocument, buttonDeleteDocument) => [
         name: "Titre",
         selector: row => row.title,
         sortable: true,
-        
+
     },
     {
         name: 'Autheur',
@@ -55,7 +51,7 @@ export const columnsDocuments = (buttonEditDocument, buttonDeleteDocument) => [
         sortable: true,
     },
     {
-        
+
         name: 'Editor',
         selector: row => row.editor,
         sortable: true,
@@ -74,20 +70,20 @@ export const columnsDocuments = (buttonEditDocument, buttonDeleteDocument) => [
         name: 'Exemplaire',
         selector: (row) => row.exemplary,
         sortable: true,
-        conditionalCellStyles:[
+        conditionalCellStyles: [
             {
                 when: row => {
-                    if(row.exemplary > 1){
-                      return true;        
-                    } 
-                  },
+                    if (row.exemplary > 1) {
+                        return true;
+                    }
+                },
                 style: {
-                  disabled: 'true',
+                    disabled: 'true',
                 },
             },
         ]
     },
-    {          
+    {
         cell: (row) => <BsFillTrashFill onClick={() => buttonDeleteDocument(row)} style={{'color': 'red'}} size={20}/>,
         name: 'Supprimer',
         ignoreRowClick: true,
@@ -95,35 +91,38 @@ export const columnsDocuments = (buttonEditDocument, buttonDeleteDocument) => [
         button: true,
     },
 ];
-
-
+const rowDisabledCriteria = row => row.exemplary <= 1;
 
 const useFetch = (idEmploye) => {
     const [data, setData] = useState(null);
-    
+
     async function fetchData(search) {
         let response;
-        if(search === undefined){
+        if (search === undefined) {
             response = await EmployeDateService.getDocuments(idEmploye);
-        } else response = await ClientDataService.searchDocument(search ,idEmploye);
+        } else response = await ClientDataService.searchDocument(search, idEmploye);
         const json = await response.data;
         setData(json);
     }
-    useEffect(() => {fetchData()},[]);
+
+    useEffect(() => {
+        fetchData()
+    }, []);
 
     return [data, fetchData];
 };
 
-export default function SearchDocumentsEmploye(){ 
+export default function SearchDocumentsEmploye() {
     const dataEmploye = useLocation().state.user;
-    const [employe, setemploye] = React.useState(dataEmploye);
-    const [selectedDocument, setSelectedDocument] = React.useState(false);
-    const [documentsForBorrow, setDocumentsForBorrow] = React.useState(false);
-    const [newBorrow, setNewBorrow] = React.useState(false);
-    const [toggledClearRows, setToggleClearRows] = React.useState(false);
-    const [isOpen, setIsOpen] = useState(false);
+    const [employe, setEmploye] = React.useState(dataEmploye);
+
     const [clients, setClients] = useState(false);
-    const [client, setClient] = useState(false);
+    const [clientForBorrow, setClientForBorrow] = useState(false);
+
+    const [documents, fetchData] = useFetch(employe[0].id);
+    const [newDocument, setNewDocument] = React.useState(false);
+    const [documentsForBorrow, setDocumentsForBorrow] = React.useState(false);
+    const [selectedEditDocument, setSelectedEditDocument] = React.useState(false);
 
     const [searchBar, setSearchBar] = useState({
         type: "all",
@@ -133,10 +132,9 @@ export default function SearchDocumentsEmploye(){
         genre: 'false',
         research: ''
     });
-    const [documents, fetchData] = useFetch(employe[0].id);
-    const [ newDocument, setNewDocument] = React.useState(false);
-    
-    const rowDisabledCriteria = row => row.exemplary <= 1;
+    const [toggledClearRows, setToggleClearRows] = React.useState(false);
+    const [isOpenModalClient, setIsOpenModalClient] = useState(false);
+    const [newBorrow, setNewBorrow] = React.useState(false);
 
 
     const handleChangeSearchBar = (event) => {
@@ -144,124 +142,120 @@ export default function SearchDocumentsEmploye(){
         const name = event.target.name;
         const value = event.target.value;
         const check = event.target.checked;
-        if(name === 'research' || name === 'type'){
+        if (name === 'research' || name === 'type') {
             setSearchBar(values => ({...values, [name]: value}));
         } else setSearchBar(values => ({...values, [name]: check.toString()}));
-        
+
     }
-    
-    const HandleSubmitSearchBar = (event) => {
+
+    const submitSearchBar = (event) => {
         event.preventDefault();
         fetchData(searchBar);
     };
 
     const buttonEditDocument = (selectedDocument) => {
-        setSelectedDocument(selectedDocument);
+        setSelectedEditDocument(selectedDocument);
     };
 
+    const buttonNewDocument = () => {
+        setNewDocument(modelDocument);
+    }
+
     const buttonDeleteDocument = (document) => {
-        EmployeDateService.deleteDocument(document, employe[0].id).
-        then(
+        EmployeDateService.deleteDocument(document, employe[0].id).then(
             () => {
                 fetchData();
             }
         )
     };
-    
-    const handleSubmitDocument = (event) => {
+
+    const handleChangeEditDocument = (event) => {
         event.preventDefault();
-        if(selectedDocument){
-            EmployeDateService.addDocument(selectedDocument, employe[0].id).
-            then(
+        const name = event.target.name;
+        const value = event.target.value;
+        setSelectedEditDocument(values => ({...values, [name]: value}));
+    }
+
+    const handleChangeNewDocument = (event) => {
+        event.preventDefault();
+        const name = event.target.name;
+        const value = event.target.value;
+        setNewDocument(newDocument => ({...newDocument, [name]: value}));
+    }
+
+    const submitDocument = (event) => {
+        event.preventDefault();
+        if (selectedEditDocument) {
+            EmployeDateService.addDocument(selectedEditDocument, employe[0].id).then(
                 () => {
                     fetchData();
                 }
             );
-        } else{
-            EmployeDateService.addDocument(newDocument, employe[0].id).
-            then(
+        } else {
+            EmployeDateService.addDocument(newDocument, employe[0].id).then(
                 () => {
                     fetchData();
                 }
             );
         }
         setNewDocument(false);
-        setSelectedDocument(false);
+        setSelectedEditDocument(false);
     }
 
-        
-    const handleChangeEditDocument = (event) => {
-        event.preventDefault();
-        const name = event.target.name;
-        const value = event.target.value;
-        setSelectedDocument(values => ({...values, [name]: value}));
-    }
-
-
-    const handleSelectDocuments = ({ selectedRows }) => {
+    const selectDocumentsForBorrow = ({selectedRows}) => {
         setDocumentsForBorrow(selectedRows);
-        console.log(selectedRows);
     };
-       
-    
-    const chooseClient = () => {
-        EmployeDateService.getClients(employe[0].id).
-        then( 
+
+    const OpenModalClient = () => {
+        EmployeDateService.getClients(employe[0].id).then(
             response => {
                 setClients(response.data);
             }
         )
-        setIsOpen(true);        
+        setIsOpenModalClient(true);
     }
 
 
     const handleCancel = () => {
-        setSelectedDocument(false);
+        setSelectedEditDocument(false);
 
     }
 
-    const buttonNeDocument = () => {
-        setNewDocument(modelDocument);
-
-    }
-
-    const handleChangeNewDocument = (event) => {
-        event.preventDefault();
-        const name = event.target.name;
-        const value = event.target.value;   
-        setNewDocument(newDocument => ({...newDocument, [name]: value}));
-    }
-
-    const handleSelectClient = ({selectedRows}) => {
-        setClient(selectedRows);
+    const selectClientModal = ({selectedRows}) => {
+        setClientForBorrow(selectedRows);
     }
 
     const submitNewBorrow = () => {
-        console.log(client);
-        EmployeDateService.addBorrows(employe[0].id ,{
-            idClient : client[0].id,
+        console.log(clientForBorrow);
+        EmployeDateService.addBorrows(employe[0].id, {
+            idClient: clientForBorrow[0].id,
             documents: documentsForBorrow
-        })
+        }).then(
+            () =>{
+                setClientForBorrow(false);
+                setClients(false);
+                setIsOpenModalClient(false);
+                setDocumentsForBorrow(false);
+                fetchData(employe[0].id);
+            }
+        )
 
-        setClient(false);
-        setIsOpen(false);
-        setDocumentsForBorrow(false);
+
     }
 
     const navigate = useNavigate();
-    const BorrowPages = () => 
-    {
-        return navigate('/client/borrowDocs', 
-        {
-            replace: true,
-            state: {
-                user: employe,
-            }        
-        }) 
+    const BorrowPages = () => {
+        return navigate('/client/borrowDocs',
+            {
+                replace: true,
+                state: {
+                    user: employe,
+                }
+            })
     };
-      
-    return(
-        
+
+    return (
+
         <>
             <Header
                 headerFor={'employe'}
@@ -269,25 +263,29 @@ export default function SearchDocumentsEmploye(){
             />
             <br/><br/><br/><br/>
 
-            {documents && 
-                <>  
-                    <div className="container_document">  
-                    <h2>Documents :</h2>
-                    <div>
-                        <FormSearchDoc 
-                            searchBar={searchBar}
-                            handleChange={handleChangeSearchBar}
-                            handleSubmit={HandleSubmitSearchBar}
+            {documents &&
+                <>
+                    <div className="container_document">
+                        <h2>Documents :</h2>
+                        <div>
+                            <FormSearchDoc
+                                searchBar={searchBar}
+                                handleChange={handleChangeSearchBar}
+                                handleSubmit={submitSearchBar}
+                            />
+                        </div>
+                        <br/><br/>
+                        <AiFillPlusCircle 
+                            onClick={() => buttonNewDocument()}
+                            style={{'paddingLeft': '14px', 'cursor': 'pointer'}} 
+                            size={40}
                         />
-                    </div>
-                    <br/><br/>
-                    <AiFillPlusCircle onClick={() => buttonNeDocument()} style={{'paddingLeft': '14px', 'cursor': 'pointer'}} size={40}/>                  
                         <DataTable
                             columns={columnsDocuments(buttonEditDocument, buttonDeleteDocument)}
                             data={documents}
                             selectableRows
                             selectableRowDisabled={rowDisabledCriteria}
-                            onSelectedRowsChange={handleSelectDocuments}
+                            onSelectedRowsChange={selectDocumentsForBorrow}
                             clearSelectedRows={toggledClearRows}
                             striped
                             pagination
@@ -295,15 +293,15 @@ export default function SearchDocumentsEmploye(){
                         />
                     </div>
                     <div>
-                        {selectedDocument &&
+                        {selectedEditDocument &&
                             <div className="container">
                                 <div className="containerEditDocument">
-                                    <FormDocument 
+                                    <FormDocument
                                         handleCancel={handleCancel}
-                                        handleSubmit={handleSubmitDocument}
+                                        handleSubmit={submitDocument}
                                         handleChangeDocument={handleChangeEditDocument}
-                                        document={selectedDocument}
-                                    />  
+                                        document={selectedEditDocument}
+                                    />
                                 </div>
 
                             </div>
@@ -311,40 +309,28 @@ export default function SearchDocumentsEmploye(){
                     </div>
                     <div>
                         {(documentsForBorrow != false) &&
-                            <button onClick={chooseClient}>Emprunter</button>
-                            
+                            <button onClick={OpenModalClient}>Emprunter</button>
 
                         }
-                        { isOpen && 
-                                    <ModalClients 
-                                        setIsOpen={setIsOpen}
-                                        Clients={clients}
-                                        handleSelectClient={handleSelectClient}
-                                        submitBorrow={submitNewBorrow}
-                                    />
-                                }
-                        {newBorrow &&
-                            <div className="contaier">
-                                <div className="containerNewBorrow">
-                                    <DataTable
-                                        title
-                                    />
-                                        
-                                </div>
-                            </div>
-
+                        {isOpenModalClient &&
+                            <ModalClients
+                                setIsOpen={setIsOpenModalClient}
+                                Clients={clients}
+                                handleSelectClient={selectClientModal}
+                                submitBorrow={submitNewBorrow}
+                            />
                         }
                     </div>
                     <div>
                         {newDocument &&
                             <div className="container">
                                 <div className="containerNewDocument">
-                                    <FormDocument 
+                                    <FormDocument
                                         handleCancel={handleCancel}
-                                        handleSubmit={handleSubmitDocument}
+                                        handleSubmit={submitDocument}
                                         handleChangeDocument={handleChangeNewDocument}
                                         document={newDocument}
-                                    />  
+                                    />
                                 </div>
                             </div>
                         }
