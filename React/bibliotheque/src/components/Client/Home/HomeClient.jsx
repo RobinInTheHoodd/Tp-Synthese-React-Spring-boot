@@ -7,7 +7,7 @@ import EditClient from "./EditClient";
 import { AiFillCheckCircle, AiOutlineConsoleSql } from "react-icons/ai";
 import { ImCross } from "react-icons/im"
  
-const columnsClient = (handleButtonClick) => [ 
+export const columnsClient = (handleButtonClick) => [ 
     {          
         cell: () => <button onClick={handleButtonClick}>Modifier</button>,
         ignoreRowClick: true,

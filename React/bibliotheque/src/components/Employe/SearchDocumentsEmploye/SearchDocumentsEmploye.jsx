@@ -9,6 +9,8 @@ import FormDocument from "./FormDocument";
 import EmployeDateService from "../../../Service/EmployeDateService";
 import { BsFillTrashFill } from "react-icons/bs";
 import { AiFillPlusCircle } from "react-icons/ai";
+import Modal from "../../utils/Modal";
+import ModalClients from "./ModalClients";
 
 const modelDocument = {
     id: '',
@@ -116,7 +118,12 @@ export default function SearchDocumentsEmploye(){
     const dataEmploye = useLocation().state.user;
     const [employe, setemploye] = React.useState(dataEmploye);
     const [selectedDocument, setSelectedDocument] = React.useState(false);
+    const [documentsForBorrow, setDocumentsForBorrow] = React.useState(false);
+    const [newBorrow, setNewBorrow] = React.useState(false);
     const [toggledClearRows, setToggleClearRows] = React.useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [clients, setClients] = useState(false);
+    const [client, setClient] = useState(false);
 
     const [searchBar, setSearchBar] = useState({
         type: "all",
@@ -191,15 +198,22 @@ export default function SearchDocumentsEmploye(){
     }
 
 
-
-    const handleChangeBorrow = (event) => {
-        
-    }
-              
+    const handleSelectDocuments = ({ selectedRows }) => {
+        setDocumentsForBorrow(selectedRows);
+        console.log(selectedRows);
+    };
+       
     
-    const handleBorrow = () => {
-        
+    const chooseClient = () => {
+        EmployeDateService.getClients(employe[0].id).
+        then( 
+            response => {
+                setClients(response.data);
+            }
+        )
+        setIsOpen(true);        
     }
+
 
     const handleCancel = () => {
         setSelectedDocument(false);
@@ -216,6 +230,22 @@ export default function SearchDocumentsEmploye(){
         const name = event.target.name;
         const value = event.target.value;   
         setNewDocument(newDocument => ({...newDocument, [name]: value}));
+    }
+
+    const handleSelectClient = ({selectedRows}) => {
+        setClient(selectedRows);
+    }
+
+    const submitNewBorrow = () => {
+        console.log(client);
+        EmployeDateService.addBorrows(employe[0].id ,{
+            idClient : client[0].id,
+            documents: documentsForBorrow
+        })
+
+        setClient(false);
+        setIsOpen(false);
+        setDocumentsForBorrow(false);
     }
 
     const navigate = useNavigate();
@@ -257,7 +287,7 @@ export default function SearchDocumentsEmploye(){
                             data={documents}
                             selectableRows
                             selectableRowDisabled={rowDisabledCriteria}
-                            onSelectedRowsChange={handleChangeBorrow}
+                            onSelectedRowsChange={handleSelectDocuments}
                             clearSelectedRows={toggledClearRows}
                             striped
                             pagination
@@ -277,6 +307,32 @@ export default function SearchDocumentsEmploye(){
                                 </div>
 
                             </div>
+                        }
+                    </div>
+                    <div>
+                        {(documentsForBorrow != false) &&
+                            <button onClick={chooseClient}>Emprunter</button>
+                            
+
+                        }
+                        { isOpen && 
+                                    <ModalClients 
+                                        setIsOpen={setIsOpen}
+                                        Clients={clients}
+                                        handleSelectClient={handleSelectClient}
+                                        submitBorrow={submitNewBorrow}
+                                    />
+                                }
+                        {newBorrow &&
+                            <div className="contaier">
+                                <div className="containerNewBorrow">
+                                    <DataTable
+                                        title
+                                    />
+                                        
+                                </div>
+                            </div>
+
                         }
                     </div>
                     <div>

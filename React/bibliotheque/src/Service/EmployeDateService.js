@@ -25,6 +25,9 @@ class EmployeDataService {
     getBorrowsDocByIdClient(idCLient, idEmploye){
         return axios.post(`${API_URL}` +idEmploye+`/employe/getBorrowsClient`, idCLient);
     }
+    addBorrows(idEmploye, newBorrow){
+        return axios.post(`${API_URL}` +idEmploye+`/employe/addBorrows`, newBorrow);
+    }
     getBillsByIdClient(idCLient, idEmploye){
         return axios.post(`${API_URL}` +idEmploye+`/employe/getBillsClient`, idCLient);
     }
