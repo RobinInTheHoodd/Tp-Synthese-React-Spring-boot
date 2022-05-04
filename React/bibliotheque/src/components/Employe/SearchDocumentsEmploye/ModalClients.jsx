@@ -43,7 +43,7 @@ const columnsClient =  [
         sortable: true
     },
 ];
-export default function ModalClients({setIsOpen ,Clients, handleSelectClient, submitBorrow}){
+export default function ModalClients({setIsOpen ,Clients, handleSelectClient, toggledClearRows, submitBorrow}){
 
 
     const TableClients = 
@@ -54,6 +54,7 @@ export default function ModalClients({setIsOpen ,Clients, handleSelectClient, su
                     selectableRows
                     selectableRowsSingle
                     onSelectedRowsChange={handleSelectClient}
+                    clearSelectedRows={toggledClearRows}
                 />
             </>;
 

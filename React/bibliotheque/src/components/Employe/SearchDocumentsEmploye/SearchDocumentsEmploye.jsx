@@ -234,14 +234,16 @@ export default function SearchDocumentsEmploye() {
             () =>{
                 setClientForBorrow(false);
                 setClients(false);
-                setIsOpenModalClient(false);
                 setDocumentsForBorrow(false);
-                fetchData(employe[0].id);
+                setIsOpenModalClient(false);
+                setToggleClearRows(!toggledClearRows);
+                fetchData();
             }
         )
 
 
     }
+
 
     const navigate = useNavigate();
     const BorrowPages = () => {
@@ -317,6 +319,7 @@ export default function SearchDocumentsEmploye() {
                                 setIsOpen={setIsOpenModalClient}
                                 Clients={clients}
                                 handleSelectClient={selectClientModal}
+                                clearSelectedRows={toggledClearRows}
                                 submitBorrow={submitNewBorrow}
                             />
                         }
