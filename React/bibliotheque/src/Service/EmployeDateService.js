@@ -34,6 +34,9 @@ class EmployeDataService {
     editBorrows(idEmploye, editBorrow){
         return axios.post(`${API_URL}` +idEmploye+`/employe/editBorrow`, editBorrow);
     }
+    deleteBorrow(idEmploye, borrow){
+        return axios.post(`${API_URL}` +idEmploye+`/employe/deleteBorrow`, borrow);
+    }
     getBillsByIdClient(idCLient, idEmploye){
         return axios.post(`${API_URL}` +idEmploye+`/employe/getBillsClient`, idCLient);
     }

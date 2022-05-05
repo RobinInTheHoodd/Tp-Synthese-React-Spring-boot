@@ -10,7 +10,7 @@ import FormBorrow from "./FormBorrows";
 
 //TODO supprimer emprunts
 
-const columnsBorrowDocs = (handleEditBorrow) => [{
+const columnsBorrowDocs = (handleEditBorrow, handleDeleteBorrow) => [{
     cell: (row) => <button onClick={() => handleEditBorrow(row)}>Modifier</button>,
     name: 'Modification',
     ignoreRowClick: true,
@@ -52,7 +52,7 @@ const columnsBorrowDocs = (handleEditBorrow) => [{
         }
     },
 }, {
-    cell: (row) => <BsFillTrashFill style={{'color': 'red'}} size={20}/>,
+    cell: (row) => <BsFillTrashFill onClick={() => handleDeleteBorrow(row)} style={{'color': 'red'}} size={20}/>,
     name: 'Supprimer',
     ignoreRowClick: true,
     allowOverflow: true,
@@ -114,6 +114,11 @@ export default function Borrows() {
 
     const handleEditBorrow = (selectedBorrow) => {
         setEditBorrow(selectedBorrow);
+    }
+
+    const handleDeleteBorrow = (selectedBorrow) => {
+        EmployeDateService.deleteBorrow(employe[0].id, selectedBorrow)
+            .then(() => {refresDataBorrows(employe[0].id)});
     }
 
     const handleCancel = () => {
@@ -201,7 +206,7 @@ export default function Borrows() {
 
             {borrows && <div className="containerBorrows">
                 <DataTable
-                    columns={columnsBorrowDocs(handleEditBorrow)}
+                    columns={columnsBorrowDocs(handleEditBorrow, handleDeleteBorrow)}
                     data={borrows}
                     expandableRows
                     expandableRowsComponent={expandableBorrows}
