@@ -11,131 +11,88 @@ import {AiFillPlusCircle} from "react-icons/ai";
 import ModalClients from "./ModalClients";
 
 const modelDocument = {
-    id: '',
-    type: '',
-    title: '',
-    author: '',
-    editor: '',
-    dateOfPublication: '',
-    numberPage: '',
-    exemplary: '',
-    genre: ''
+    id: '', type: '', title: '', author: '', editor: '', dateOfPublication: '', numberPage: '', exemplary: '', genre: ''
 }
-export const columnsDocuments = (buttonEditDocument, buttonDeleteDocument) => [
-    {
-        cell: (row) => <button onClick={() => buttonEditDocument(row)}> Modifier</button>,
-        name: 'Modifier',
-        ignoreRowClick: true,
-        allowOverflow: true,
-        button: true,
-    },
-    {
-        name: 'id',
-        selector: row => row.id,
-        omit: true,
-    },
-    {
-        name: 'Type',
-        selector: row => row.type,
-        sortable: true,
-    },
-    {
-        name: "Titre",
-        selector: row => row.title,
-        sortable: true,
+export const columnsDocuments = (buttonEditDocument, buttonDeleteDocument) => [{
+    cell: (row) => <button onClick={() => buttonEditDocument(row)}> Modifier</button>,
+    name: 'Modifier',
+    ignoreRowClick: true,
+    allowOverflow: true,
+    button: true,
+}, {
+    name: 'id', selector: row => row.id, omit: true,
+}, {
+    name: 'Type', selector: row => row.type, sortable: true,
+}, {
+    name: "Titre", selector: row => row.title, sortable: true,
 
-    },
-    {
-        name: 'Autheur',
-        selector: row => row.author,
-        sortable: true,
-    },
-    {
+}, {
+    name: 'Autheur', selector: row => row.author, sortable: true,
+}, {
 
-        name: 'Editor',
-        selector: row => row.editor,
-        sortable: true,
-    },
-    {
-        name: 'date de publication',
-        selector: (row) => row.dateOfPublication,
-        sortable: true,
-    },
-    {
-        name: 'Nombre de page',
-        selector: (row) => row.numberPage,
-        sortable: true,
-    },
-    {
-        name: 'Exemplaire',
-        selector: (row) => row.exemplary,
-        sortable: true,
-        conditionalCellStyles: [
-            {
-                when: row => {
-                    if (row.exemplary > 1) {
-                        return true;
-                    }
-                },
-                style: {
-                    disabled: 'true',
-                },
-            },
-        ]
-    },
-    {
-        cell: (row) => <BsFillTrashFill onClick={() => buttonDeleteDocument(row)} style={{'color': 'red'}} size={20}/>,
-        name: 'Supprimer',
-        ignoreRowClick: true,
-        allowOverflow: true,
-        button: true,
-    },
-];
-const rowDisabledCriteria = row => row.exemplary <= 1;
+    name: 'Editor', selector: row => row.editor, sortable: true,
+}, {
+    name: 'date de publication', selector: (row) => row.dateOfPublication, sortable: true,
+}, {
+    name: 'Nombre de page', selector: (row) => row.numberPage, sortable: true,
+}, {
+    name: 'Exemplaire', selector: (row) => row.exemplary, sortable: true, conditionalCellStyles: [{
+        when: row => {
+            if (row.exemplary > 1) {
+                return true;
+            }
+        }, style: {
+            disabled: 'true',
+        },
+    },]
+}, {
+    cell: (row) => <BsFillTrashFill onClick={() => buttonDeleteDocument(row)} style={{'color': 'red'}} size={20}/>,
+    name: 'Supprimer',
+    ignoreRowClick: true,
+    allowOverflow: true,
+    button: true,
+},];
+
+const DisabledSelectDocumentCriteria = row => row.exemplary <= 1;
 
 const useFetch = (idEmploye) => {
-    const [data, setData] = useState(null);
+    const [document, setDocument] = useState(null);
 
-    async function fetchData(search) {
+    async function fetchDataDocuments(search) {
         let response;
         if (search === undefined) {
             response = await EmployeDateService.getDocuments(idEmploye);
         } else response = await ClientDataService.searchDocument(search, idEmploye);
         const json = await response.data;
-        setData(json);
+        setDocument(json);
     }
 
     useEffect(() => {
-        fetchData()
+        fetchDataDocuments()
     }, []);
 
-    return [data, fetchData];
+    return [document, fetchDataDocuments];
 };
 
 export default function SearchDocumentsEmploye() {
     const dataEmploye = useLocation().state.user;
-    const [employe, setEmploye] = React.useState(dataEmploye);
+    const [employe] = React.useState(dataEmploye);
 
-    const [clients, setClients] = useState(false);
+    const [isOpenModalClient, setIsOpenModalClient] = useState(false);
+    const [modalClients, setModalClients] = useState(false);
     const [clientForBorrow, setClientForBorrow] = useState(false);
 
-    const [documents, fetchData] = useFetch(employe[0].id);
+    const [documents, fetchDataDocuments] = useFetch(employe[0].id);
     const [newDocument, setNewDocument] = React.useState(false);
     const [documentsForBorrow, setDocumentsForBorrow] = React.useState(false);
     const [selectedEditDocument, setSelectedEditDocument] = React.useState(false);
 
     const [searchBar, setSearchBar] = useState({
-        type: "all",
-        title: false,
-        author: false,
-        editor: false,
-        genre: false,
-        research: ''
+        type: "all", title: false, author: false, editor: false, genre: false, research: ''
     });
 
 
     const [toggledClearRows, setToggleClearRows] = React.useState(false);
-    const [isOpenModalClient, setIsOpenModalClient] = useState(false);
 
 
     const handleChangeSearchBar = (event) => {
@@ -143,16 +100,16 @@ export default function SearchDocumentsEmploye() {
         const name = event.target.name;
         const value = event.target.value;
         const check = event.target.checked;
-        if (name == 'research' || name == 'type') {
+        if (name === 'research' || name === 'type') {
             setSearchBar(values => ({...values, [name]: value}));
         } else {
             setSearchBar({...searchBar, [name]: check});
         }
     }
-    
+
     const submitSearchBar = (event) => {
         event.preventDefault();
-        fetchData(searchBar);
+        fetchDataDocuments(searchBar);
     };
 
     const buttonEditDocument = (selectedDocument) => {
@@ -164,11 +121,9 @@ export default function SearchDocumentsEmploye() {
     }
 
     const buttonDeleteDocument = (document) => {
-        EmployeDateService.deleteDocument(document, employe[0].id).then(
-            () => {
-                fetchData();
-            }
-        )
+        EmployeDateService.deleteDocument(document, employe[0].id).then(() => {
+            fetchDataDocuments();
+        })
     };
 
     const handleChangeEditDocument = (event) => {
@@ -188,59 +143,49 @@ export default function SearchDocumentsEmploye() {
     const submitDocument = (event) => {
         event.preventDefault();
         if (selectedEditDocument) {
-            EmployeDateService.addDocument(selectedEditDocument, employe[0].id).then(
-                () => {
-                    fetchData();
-                }
-            );
+            EmployeDateService.addDocument(selectedEditDocument, employe[0].id).then(() => {
+                fetchDataDocuments();
+            });
         } else {
-            EmployeDateService.addDocument(newDocument, employe[0].id).then(
-                () => {
-                    fetchData();
-                }
-            );
+            EmployeDateService.addDocument(newDocument, employe[0].id).then(() => {
+                fetchDataDocuments();
+            });
         }
         setNewDocument(false);
         setSelectedEditDocument(false);
+    }
+
+    const OpenModalClient = () => {
+        EmployeDateService.getClients(employe[0].id).then(response => {
+            setModalClients(response.data);
+        })
+        setIsOpenModalClient(true);
     }
 
     const selectDocumentsForBorrow = ({selectedRows}) => {
         setDocumentsForBorrow(selectedRows);
     };
 
-    const OpenModalClient = () => {
-        EmployeDateService.getClients(employe[0].id).then(
-            response => {
-                setClients(response.data);
-            }
-        )
-        setIsOpenModalClient(true);
-    }
-
-
-    const handleCancel = () => {
-        setSelectedEditDocument(false);
-
-    }
-
     const selectClientModal = ({selectedRows}) => {
         setClientForBorrow(selectedRows);
     }
 
+    const handleCancel = () => {
+        setSelectedEditDocument(false);
+    }
+
     const submitNewBorrow = () => {
         EmployeDateService.addBorrows(employe[0].id, {
-            idClient: clientForBorrow[0].id,
-            documents: documentsForBorrow
-        }).then(
-            () =>{
-                setClientForBorrow(false);
-                setClients(false);
-                setDocumentsForBorrow(false);
-                setIsOpenModalClient(false);
-                setToggleClearRows(!toggledClearRows);
-                fetchData();
-            }
-        )
+            idClient: clientForBorrow[0].id, documents: documentsForBorrow
+        }).then(() => {
+
+            setModalClients(false);
+            setDocumentsForBorrow(false);
+            setIsOpenModalClient(false);
+            setToggleClearRows(!toggledClearRows);
+            BorrowPages();
+            fetchDataDocuments();
+        })
 
 
     }
@@ -248,17 +193,15 @@ export default function SearchDocumentsEmploye() {
 
     const navigate = useNavigate();
     const BorrowPages = () => {
-        return navigate('/client/borrowDocs',
-            {
-                replace: true,
-                state: {
-                    user: employe,
-                }
-            })
+        return navigate('/employe/borrowDocs', {
+            replace: true, state: {
+                user: employe,
+                client: clientForBorrow[0]
+            }
+        })
     };
 
     return (
-
         <>
             <Header
                 headerFor={'employe'}
@@ -266,81 +209,71 @@ export default function SearchDocumentsEmploye() {
             />
             <br/><br/><br/><br/>
 
-            {documents &&
-                <>
-                    <div className="container_document">
-                        <h2>Documents :</h2>
-                        <div>
-                            <FormSearchDoc
-                                searchBar={searchBar}
-                                handleChange={handleChangeSearchBar}
-                                handleSubmit={submitSearchBar}
-                            />
-                        </div>
-                        <br/><br/>
-                        <AiFillPlusCircle 
-                            onClick={() => buttonNewDocument()}
-                            style={{'paddingLeft': '14px', 'cursor': 'pointer'}} 
-                            size={40}
-                        />
-                        <DataTable
-                            columns={columnsDocuments(buttonEditDocument, buttonDeleteDocument)}
-                            data={documents}
-                            selectableRows
-                            selectableRowDisabled={rowDisabledCriteria}
-                            onSelectedRowsChange={selectDocumentsForBorrow}
-                            clearSelectedRows={toggledClearRows}
-                            striped
-                            pagination
-                            defaultSortFieldId={2}
+            {documents && <div className="contentContainer">
+                <div className="container_document">
+                    <h2>Documents :</h2>
+                    <div className="searchContainer">
+                        <FormSearchDoc
+                            searchBar={searchBar}
+                            handleChange={handleChangeSearchBar}
+                            handleSubmit={submitSearchBar}
                         />
                     </div>
-                    <div>
-                        {selectedEditDocument &&
-                            <div className="container">
-                                <div className="containerEditDocument">
-                                    <FormDocument
-                                        handleCancel={handleCancel}
-                                        handleSubmit={submitDocument}
-                                        handleChangeDocument={handleChangeEditDocument}
-                                        document={selectedEditDocument}
-                                    />
-                                </div>
+                    <br/><br/>
+                    <AiFillPlusCircle
+                        onClick={() => buttonNewDocument()}
+                        style={{'paddingLeft': '14px', 'cursor': 'pointer'}}
+                        size={40}
+                    />
+                    <DataTable
+                        columns={columnsDocuments(buttonEditDocument, buttonDeleteDocument)}
+                        data={documents}
+                        selectableRows
+                        selectableRowDisabled={DisabledSelectDocumentCriteria}
+                        onSelectedRowsChange={selectDocumentsForBorrow}
+                        clearSelectedRows={toggledClearRows}
+                        striped
+                        pagination
+                        defaultSortFieldId={2}
+                    />
+                </div>
+                {selectedEditDocument && <div className="container">
+                    <div className="containerEditDocument">
+                        <FormDocument
+                            handleCancel={handleCancel}
+                            handleSubmit={submitDocument}
+                            handleChangeDocument={handleChangeEditDocument}
+                            document={selectedEditDocument}
+                        />
+                    </div>
 
-                            </div>
-                        }
-                    </div>
-                    <div>
-                        {(documentsForBorrow != false) &&
-                            <button onClick={OpenModalClient}>Emprunter</button>
+                </div>}
 
-                        }
-                        {isOpenModalClient &&
-                            <ModalClients
-                                setIsOpen={setIsOpenModalClient}
-                                Clients={clients}
-                                handleSelectClient={selectClientModal}
-                                clearSelectedRows={toggledClearRows}
-                                submitBorrow={submitNewBorrow}
-                            />
-                        }
+                {(documentsForBorrow != false) && <button onClick={OpenModalClient}>Emprunter</button>
+
+                }
+                {isOpenModalClient && <div className="modalClient">
+                    <ModalClients
+                        setIsOpen={setIsOpenModalClient}
+                        Clients={modalClients}
+                        handleSelectClient={selectClientModal}
+                        clearSelectedRows={toggledClearRows}
+                        submitBorrow={submitNewBorrow}
+                    />
+                </div>
+                }
+
+                {newDocument && <div className="container">
+                    <div className="containerNewDocument">
+                        <FormDocument
+                            handleCancel={handleCancel}
+                            handleSubmit={submitDocument}
+                            handleChangeDocument={handleChangeNewDocument}
+                            document={newDocument}
+                        />
                     </div>
-                    <div>
-                        {newDocument &&
-                            <div className="container">
-                                <div className="containerNewDocument">
-                                    <FormDocument
-                                        handleCancel={handleCancel}
-                                        handleSubmit={submitDocument}
-                                        handleChangeDocument={handleChangeNewDocument}
-                                        document={newDocument}
-                                    />
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </>
-            }
+                </div>}
+            </div>}
         </>
     )
 }

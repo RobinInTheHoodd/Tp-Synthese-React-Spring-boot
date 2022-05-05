@@ -48,8 +48,8 @@ const useFetch = () => {
 
 
 
-  useEffect(() => {fetchData()},[]);
-  useEffect(() => {fetchDataEmploye()},[]);
+  useEffect(() => {fetchData().then(r => {})},[]);
+  useEffect(() => {fetchDataEmploye().then(r => {})},[]);
   
 
   return data;
@@ -64,7 +64,7 @@ function App() {
   } else {
     return (
       <>
-         <Login dataClient={data}/>
+         <Login dataUser={data}/>
       </> 
      )
   }

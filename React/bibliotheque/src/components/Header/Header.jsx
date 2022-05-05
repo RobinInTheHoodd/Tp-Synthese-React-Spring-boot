@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 
 const headerClient = {
@@ -28,12 +28,12 @@ const headerAdmin = {
     deconnect: 'Déconnecter'
 }
 
-export default function Header({ headerFor, user}){
+export default function Header({headerFor, user}) {
 
     const header = () => {
-        if(headerFor === 'client' ){
+        if (headerFor === 'client') {
             return headerForUser(headerClient)
-        } else if(headerFor === 'employe' ){
+        } else if (headerFor === 'employe') {
             return headerForUser(headerEmploye);
         } else return headerForUser(headerAdmin);
     }
@@ -43,8 +43,8 @@ export default function Header({ headerFor, user}){
         (field) => {
             return (
                 <>
-                    <Link to={"/"+headerFor+"/"+field} state={{user: user,}}>
-                        {header[field]}</Link> | { " " }
+                    <Link to={"/" + headerFor + "/" + field} state={{user: user,}}>
+                        {header[field]}</Link> | {" "}
                 </>
             );
         }
@@ -52,23 +52,15 @@ export default function Header({ headerFor, user}){
 
     return (
         <div>
-        <h1>{headerFor}</h1>
-        <nav
-          style={{
-            borderBottom: "solid 1px",
-            paddingBottom: "1rem",
-          }}
-        >
-        {header()}
-        </nav>
-      </div>
+            <h1>{headerFor}</h1>
+            <nav
+                style={{
+                    borderBottom: "solid 1px",
+                    paddingBottom: "1rem",
+                }}
+            >
+                {header()}
+            </nav>
+        </div>
     )
 }
-
-/* 
-        <Link to="/home">home</Link> |{" "}
-          <Link to="/searchDocument">Reherche de document</Link> |{" "}
-          <Link to="/borrowDocs">Emprunts</Link> |{" "}
-          <Link to="/bills">Factures</Link> |{" "}
-
-*/

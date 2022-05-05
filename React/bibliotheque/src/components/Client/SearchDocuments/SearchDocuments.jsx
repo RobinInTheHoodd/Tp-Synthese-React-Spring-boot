@@ -1,37 +1,38 @@
 import Header from "../../Header/Header"
 import {useLocation, useNavigate} from 'react-router-dom';
-import { useCallback, useEffect, useState } from 'react';
-import React from "react";
+import React, {useEffect, useState} from 'react';
 import DataTable from 'react-data-table-component';
-import ClientDataService from "../../../Service/ClientDataService"; 
+import ClientDataService from "../../../Service/ClientDataService";
 
 import FormSearchDoc from "./FormSearchDoc";
-import { columnsDocuments } from "../Home/HomeClient";
-
+import {columnsDocuments} from "../Home/HomeClient";
 
 
 const useFetch = (id) => {
-    const [data, setData] = useState(null);
-    
-    async function fetchData(search) {
-        let response;
-        if(search === undefined){
-            response = await ClientDataService.getDocuments(id);
-        } else response = await ClientDataService.searchDocument(search ,id);
-        const json = await response.data;
-        setData(json);
-    }
-    useEffect(() => {fetchData()},[]);
+    const [documents, setDocuments] = useState(null);
 
-    return [data, fetchData];
+    async function fetchDataDocuments(search) {
+        let response;
+        if (search === undefined) {
+            response = await ClientDataService.getDocuments(id);
+        } else response = await ClientDataService.searchDocument(search, id);
+        const json = await response.data;
+        setDocuments(json);
+    }
+
+    useEffect(() => {
+        fetchDataDocuments()
+    }, []);
+
+    return [documents, fetchDataDocuments];
 };
 
-export default function SearchDocuments(){ 
+export default function SearchDocuments() {
     const dataClient = useLocation().state.user;
-    const [client, setClient] = React.useState(dataClient);
-    const [selectedRows, setSelectedRows] = React.useState(false);
-    const [toggledClearRows, setToggleClearRows] = React.useState(false);
-
+    const [client] = React.useState(dataClient);
+    const [documents, fetchDataDocuments] = useFetch(client[0].id);
+    const [selectedDocuments, setSelectedDocuments] = React.useState(false);
+    const [toggledClearSelectedDocuments, setToggleClearSelectedDocuments] = React.useState(false);
     const [searchBar, setSearchBar] = useState({
         type: "all",
         title: 'false',
@@ -40,29 +41,38 @@ export default function SearchDocuments(){
         genre: 'false',
         research: ''
     });
-    const [documents, fetchData] = useFetch(client[0].id);
-    
-    const rowDisabledCriteria = row => row.exemplary <= 1;
 
+    const documentsDisabledSelectCriteria = row => row.exemplary <= 1;
+
+    const navigate = useNavigate();
+    const BorrowPages = () => {
+        return navigate('/client/borrowDocs',
+            {
+                replace: true,
+                state: {
+                    user: client,
+                }
+            })
+    };
 
     const handleChangeSearchBar = (event) => {
         event.preventDefault();
         const name = event.target.name;
         const value = event.target.value;
         const check = event.target.checked;
-        if(name === 'research' || name === 'type'){
+        if (name === 'research' || name === 'type') {
             setSearchBar(values => ({...values, [name]: value}));
         } else setSearchBar(values => ({...values, [name]: check.toString()}));
-        
+
     }
 
-    const HandleSubmitSearchBar = (event) => {
+    const handleSubmitSearchBar = (event) => {
         event.preventDefault();
-        fetchData(searchBar);
+        fetchDataDocuments(searchBar);
     };
 
-    const handleChangeBorrow = ({ selectedRows }) => {
-        setSelectedRows(selectedRows.map(row => {      
+    const handleChangeBorrow = ({selectedRows}) => {
+        setSelectedDocuments(selectedRows.map(row => {
             return {
                 id: '',
                 client: client[0],
@@ -70,32 +80,18 @@ export default function SearchDocuments(){
             }
         }));
     };
-    
-              
-    
+
     const handleBorrow = () => {
-        ClientDataService.addBorrowDocs(selectedRows, client[0].id)
-        console.log(selectedRows)
-        setSelectedRows(false);
-        setToggleClearRows(!toggledClearRows);
-        return BorrowPages();
+        ClientDataService.addBorrowDocs(selectedDocuments, client[0].id)
+            .then(() => {
+                setSelectedDocuments(false);
+                setToggleClearSelectedDocuments(!toggledClearSelectedDocuments);
+                return BorrowPages();
+            });
     }
 
+    return (
 
-    const navigate = useNavigate();
-    const BorrowPages = () => 
-    {
-        return navigate('/client/borrowDocs', 
-        {
-            replace: true,
-            state: {
-                user: client,
-            }        
-        }) 
-    };
-      
-    return(
-        
         <>
             <Header
                 headerFor={'client'}
@@ -103,41 +99,42 @@ export default function SearchDocuments(){
             />
             <br/><br/><br/><br/>
 
-            {documents && 
-                <>  
-                    <div>
-                        <FormSearchDoc 
-                            searchBar={searchBar}
-                            handleChange={handleChangeSearchBar}
-                            handleSubmit={HandleSubmitSearchBar}
-                        />
-                    </div>
-                    <br/><br/>
-                    <div className="container_document">                    
-                        <DataTable
-                            title={"Documents :"}
-                            columns={columnsDocuments}
-                            data={documents}
-                            selectableRows
-                            selectableRowDisabled={rowDisabledCriteria}
-                            onSelectedRowsChange={handleChangeBorrow}
-                            clearSelectedRows={toggledClearRows}
-                            striped
-                            pagination
-                            defaultSortFieldId={2}
-                        />
-                    </div>
-                    <div>
-                    {
-                        (selectedRows != false) &&
-                            <button onClick={handleBorrow}>
-                            Emprunter
-                            </button> 
-                            
-                    }
-                    </div>
-                </>
-            }
+            <div className="documentsContainer">
+                {documents &&
+                    <>
+                        <div>
+                            <FormSearchDoc
+                                searchBar={searchBar}
+                                handleChange={handleChangeSearchBar}
+                                handleSubmit={handleSubmitSearchBar}
+                            />
+                        </div>
+                        <br/><br/>
+                        <div className="container_document">
+                            <DataTable
+                                title={"Documents :"}
+                                columns={columnsDocuments}
+                                data={documents}
+                                selectableRows
+                                selectableRowDisabled={documentsDisabledSelectCriteria}
+                                onSelectedRowsChange={handleChangeBorrow}
+                                clearSelectedRows={toggledClearSelectedDocuments}
+                                striped
+                                pagination
+                                defaultSortFieldId={2}
+                            />
+                        </div>
+                        <div className="documentToBorrowContainer">
+                            {
+                                (selectedDocuments != false) &&
+                                <button onClick={handleBorrow}>
+                                    Emprunter
+                                </button>
+                            }
+                        </div>
+                    </>
+                }
+            </div>
         </>
     )
 }

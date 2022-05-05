@@ -1,45 +1,45 @@
 import {useLocation} from 'react-router-dom';
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../../Header/Header";
 import ClientDataService from '../../../Service/ClientDataService';
-import { useState, useEffect } from 'react';
-import { columnsBill } from '../Home/HomeClient';
+import {columnsBill} from '../Home/HomeClient';
 import DataTable from 'react-data-table-component';
 import UserDataService from '../../../Service/UserDataService';
 
 
 const useFetch = (id) => {
     const [data, setData] = useState(null);
-    
-    async function fetchData() {
+
+    async function fetchDataBills() {
         let response;
         response = await ClientDataService.getBills(id);
         const json = await response.data;
         setData(json);
     }
-    useEffect(() => {fetchData()},[]);
 
-    return [data, fetchData];
+    useEffect(() => {
+        fetchDataBills()
+    }, []);
+
+    return [data, fetchDataBills];
 };
 
 export default function Bills() {
 
     const dataClient = useLocation().state.user;
     const [client, setClient] = React.useState(dataClient);
-    const [bills, fetchData] = useFetch(client[0].id);
+    const [bills, fetchDataBills] = useFetch(client[0].id);
 
 
-
-    const handleSubmitPay = () => { 
+    const handleSubmitPay = () => {
         ClientDataService.addBill(
             {
                 paid: client[0].fine,
-            },  client[0].id
+            }, client[0].id
         ).then(
             () => {
-                fetchData();
-                UserDataService.getClientsById(client[0].id).
-                then(
+                fetchDataBills().then(r => {});
+                UserDataService.getClientsById(client[0].id).then(
                     response => {
                         console.log(response.data);
                         setClient([response.data]);
@@ -49,13 +49,13 @@ export default function Bills() {
         )
     }
 
-    return(
+    return (
         <div>
-            <Header 
+            <Header
                 headerFor={'client'}
                 user={client}
             />
-            <div>
+            <div className="billsContainer">
                 <br/><br/>
                 <h2>Factures :</h2>
                 <br/><br/>
@@ -63,9 +63,9 @@ export default function Bills() {
                     <>
                         <p>Somme à payer : {client[0].fine}$</p>
 
-                        { client[0].fine != 0 &&
-                            <button onClick={handleSubmitPay}> 
-                            Payer !!
+                        {client[0].fine !== 0 &&
+                            <button onClick={handleSubmitPay}>
+                                Payer !!
                             </button>
                         }
 
@@ -78,7 +78,7 @@ export default function Bills() {
                             striped
                             pagination
                         />
-                    
+
                     </>
                 }
             </div>

@@ -2,7 +2,7 @@
 import FormAdress from "./EditClientAddress";
 import React from "react";
 
-export default function EditClient({handleSubmit, handleChange, handleChangeAddress, client, handleCancel}) {
+export default function EditClient({handleSubmit, handleChangeClient, handleChangeClientAddress, client, handleCancel}) {
 
     
     return (
@@ -15,7 +15,7 @@ export default function EditClient({handleSubmit, handleChange, handleChangeAddr
                         type="text" 
                         name="firstName"
                         value={client.firstName}
-                        onChange={handleChange}
+                        onChange={handleChangeClient}
                     />
 
                     <label>Nom :</label>
@@ -23,7 +23,7 @@ export default function EditClient({handleSubmit, handleChange, handleChangeAddr
                         type="text" 
                         name="secondName" 
                         value={client.secondName}
-                        onChange={handleChange}
+                        onChange={handleChangeClient}
                     />
 
                     <label>Mot de passe :</label>
@@ -31,7 +31,7 @@ export default function EditClient({handleSubmit, handleChange, handleChangeAddr
                         type="text" 
                         name="password" 
                         value={client.password}
-                        onChange={handleChange}
+                        onChange={handleChangeClient}
                     />
 
                     <label>anniversaire :</label>
@@ -40,7 +40,7 @@ export default function EditClient({handleSubmit, handleChange, handleChangeAddr
                         name="bitrhday" 
                         datatype="yyyy-MM-dd"
                         value={client.bitrhday}
-                        onChange={handleChange}
+                        onChange={handleChangeClient}
                     />
                     <br></br>
                     <label>Téléphone :</label>
@@ -48,7 +48,7 @@ export default function EditClient({handleSubmit, handleChange, handleChangeAddr
                         type="number" 
                         name="phoneNumber" 
                         value={client.phoneNumber}
-                        onChange={handleChange}
+                        onChange={handleChangeClient}
                     />
 
                     <label>Email :</label>
@@ -56,7 +56,7 @@ export default function EditClient({handleSubmit, handleChange, handleChangeAddr
                         type="email" 
                         name="email" 
                         value={client.email}
-                        onChange={handleChange}
+                        onChange={handleChangeClient}
                     />
                     
                     <br></br>
@@ -65,7 +65,7 @@ export default function EditClient({handleSubmit, handleChange, handleChangeAddr
                     <br></br>
                     <FormAdress 
                         client={client}
-                        handleChange={handleChangeAddress}
+                        handleChange={handleChangeClientAddress}
                     />
 
                     <br></br>

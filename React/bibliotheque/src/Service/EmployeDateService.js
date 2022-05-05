@@ -5,10 +5,10 @@ const API_URL = "http://localhost:8080/"
 class EmployeDataService {
 
     getEmployeById(id){
-        return axios.get(`${API_URL}` +id+`/employe/addBorrows`);
+        return axios.get(`${API_URL}` +id+`/employe/getEmploye`);
     }
     updateEmployeById(employe ,id){
-        return axios.post(`${API_URL}` +id+`/employe/addBorrows`, employe);
+        return axios.post(`${API_URL}` +id+`/employe/editEmploye`, employe);
     }
     getClients(id){
         return axios.get(`${API_URL}` +id+`/employe/getClients`);
