@@ -37,6 +37,15 @@ class EmployeDataService {
     getBillsByIdClient(idCLient, idEmploye){
         return axios.post(`${API_URL}` +idEmploye+`/employe/getBillsClient`, idCLient);
     }
+    getBills(idEmploye){
+        return axios.get(`${API_URL}` +idEmploye+`/employe/getBills`);
+    }
+    editBills(idEmploye, bill){
+        return axios.post(`${API_URL}` +idEmploye+`/employe/editBills`, bill);
+    }
+    deleteBill(idEmploye, bill){
+        return axios.post(`${API_URL}` +idEmploye+`/employe/deleteBill`, bill);
+    }
     addDocument(document, idEmploye){
         return axios.post(`${API_URL}` +idEmploye+`/employe/addDocument`, document);
     }

@@ -13,6 +13,7 @@ import Bills from './components/Client/Bills/Bills';
 import Clients from './components/Employe/Clients/Clients';
 import SearchDocumentsEmploye from './components/Employe/SearchDocumentsEmploye/SearchDocumentsEmploye';
 import Borrows from './components/Employe/Borrows/Borrows';
+import EmployeBills from './components/Employe/Bills/Bills';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -28,6 +29,7 @@ root.render(
         <Route path='/employe/clients' element={<Clients />}/>
         <Route path='/employe/searchDocuments' element={<SearchDocumentsEmploye />}/>
         <Route path='/employe/borrowDocs' element={<Borrows />}/>
+        <Route path='/employe/bills' element={<EmployeBills />}/>
         <Route path='/employe/deconnect' element={<App />}/>
         <Route path='/admin' element={<HomeAdmin />}/>
         <Route path='/client/deconnect' element={<App />}/>

@@ -230,7 +230,11 @@ export default function Clients({}) {
     }
 
     const handleButtonBills = (row) => {
-
+        return navigate('/employe/bills', {
+            replace: true, state: {
+                user: employe, client: row,
+            }
+        })
 
     }
 
