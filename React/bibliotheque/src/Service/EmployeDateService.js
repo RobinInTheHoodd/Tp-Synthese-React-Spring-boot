@@ -4,68 +4,69 @@ const API_URL = "http://localhost:8080/"
 
 class EmployeDataService {
 
+    
     getEmployes(id){
-        return axios.get(`${API_URL}` +id+`/employe/employes`);
+        return axios.get(`${API_URL}` +id+`/employeReact/employes`);
     }
     getEmployeById(id){
-        return axios.get(`${API_URL}` +id+`/employe/getEmploye`);
+        return axios.get(`${API_URL}` +id+`/employeReact/employe`);
     }
     addEmploye(employe , id){
-        return axios.post(`${API_URL}` +id+`/employe/newEmploye`, employe);
+        return axios.post(`${API_URL}` +id+`/employeReact/newEmploye`, employe);
     }
     deleteEmploye(employe , id){
-        return axios.post(`${API_URL}` +id+`/employe/deleteEmploye`, employe);
+        return axios.post(`${API_URL}` +id+`/employeReact/deleteEmploye`, employe);
     }
     updateEmploye(employe , id){
-        return axios.post(`${API_URL}` +id+`/employe/editEmploye`, employe);
+        return axios.post(`${API_URL}` +id+`/employeReact/editEmploye`, employe);
     }
     getClients(id){
-        return axios.get(`${API_URL}` +id+`/employe/getClients`);
+        return axios.get(`${API_URL}` +id+`/employeReact/getClients`);
     }
     deleteClient(client, id){
-        return axios.post(`${API_URL}` +id+`/employe/deleteClient`, client);
+        return axios.post(`${API_URL}` +id+`/employeReact/deleteClient`, client);
     }
     createClient(client, id){
-        return axios.post(`${API_URL}` +id+`/employe/createClient`, client);
+        return axios.post(`${API_URL}` +id+`/employeReact/createClient`, client);
     }
     updateClient(client, id){
-        return axios.post(`${API_URL}` +id+`/employe/editClient`, client);
+        return axios.post(`${API_URL}` +id+`/employeReact/editClient`, client);
     }
     getBorrowsDocByIdClient(idCLient, idEmploye){
-        return axios.post(`${API_URL}` +idEmploye+`/employe/getBorrowsClientId`, idCLient);
+        return axios.post(`${API_URL}` +idEmploye+`/employeReact/getBorrowsClientId`, idCLient);
     }
     getBorrowsDoc(idEmploye){
-        return axios.get(`${API_URL}` +idEmploye+`/employe/getBorrowsClient`);
+        return axios.get(`${API_URL}` +idEmploye+`/employeReact/getBorrowsClient`);
     }
     addBorrows(idEmploye, newBorrow){
-        return axios.post(`${API_URL}` +idEmploye+`/employe/addBorrows`, newBorrow);
+        return axios.post(`${API_URL}` +idEmploye+`/employeReact/addBorrows`, newBorrow);
     }
     editBorrows(idEmploye, editBorrow){
-        return axios.post(`${API_URL}` +idEmploye+`/employe/editBorrow`, editBorrow);
+        return axios.post(`${API_URL}` +idEmploye+`/employeReact/editBorrow`, editBorrow);
     }
     deleteBorrow(idEmploye, borrow){
-        return axios.post(`${API_URL}` +idEmploye+`/employe/deleteBorrow`, borrow);
+        return axios.post(`${API_URL}` +idEmploye+`/employeReact/deleteBorrow`, borrow);
     }
     getBillsByIdClient(idCLient, idEmploye){
-        return axios.post(`${API_URL}` +idEmploye+`/employe/getBillsClient`, idCLient);
+        return axios.post(`${API_URL}` +idEmploye+`/employeReact/getBillsClient`, idCLient);
     }
     getBills(idEmploye){
-        return axios.get(`${API_URL}` +idEmploye+`/employe/getBills`);
+        return axios.get(`${API_URL}` +idEmploye+`/employeReact/getBills`);
     }
     editBills(idEmploye, bill){
-        return axios.post(`${API_URL}` +idEmploye+`/employe/editBills`, bill);
+        return axios.post(`${API_URL}` +idEmploye+`/employeReact/editBills`, bill);
     }
     deleteBill(idEmploye, bill){
-        return axios.post(`${API_URL}` +idEmploye+`/employe/deleteBill`, bill);
+        return axios.post(`${API_URL}` +idEmploye+`/employeReact/deleteBill`, bill);
     }
     addDocument(document, idEmploye){
-        return axios.post(`${API_URL}` +idEmploye+`/employe/addDocument`, document);
+        return axios.post(`${API_URL}` +idEmploye+`/employeReact/addDocument`, document);
     }
     getDocuments(idEmploye){
-        return axios.get(`${API_URL}` +idEmploye+`/employe/getDocuments`);
+        return axios.get(`${API_URL}` +idEmploye+`/employeReact/getDocuments`);
     }
     deleteDocument(document, idEmploye){
-        return axios.post(`${API_URL}` +idEmploye+`/employe/deleteDocument`, document);
+        return axios.post(`${API_URL}` +idEmploye+`/employeReact/deleteDocument`, document);
     }
     
 

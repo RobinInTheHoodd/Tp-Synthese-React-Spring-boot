@@ -8,6 +8,7 @@ import ca.cal.librairie.model.Document.DocumentDto.UtilsDto.BillDto;
 import ca.cal.librairie.model.Document.DocumentDto.UtilsDto.BorrowDocDto;
 import ca.cal.librairie.model.User.Dto.ClientDto;
 import ca.cal.librairie.model.User.Utils.SearchBar;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ import java.util.List;
 public interface ClientService {
 
     ClientDto getClientDtoById(long id);
+
+    ClientDto updateClientDto(@NotNull ClientDto clientDto);
 
     List<documentDto> getBooksDto();
 
@@ -60,9 +63,11 @@ public interface ClientService {
 
     List<documentDto> getDocsDtoByEditor(String editor);
 
-    List<BorrowDocDto> addBorrowDto(BorrowForm borrowForm);
+    List<BorrowDocDto> addBorrowForm(BorrowForm borrowForm);
 
     List<BorrowDocDto> getBorrowsByClientId(Long id);
+
+    void addBorrowDto(BorrowDocDto borrowDocDto);
 
     Long addBill(BillForm billForm);
 

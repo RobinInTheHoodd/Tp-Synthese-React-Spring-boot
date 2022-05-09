@@ -2,6 +2,7 @@ package ca.cal.librairie;
 
 import ca.cal.librairie.model.Document.Book;
 import ca.cal.librairie.model.Document.CD;
+import ca.cal.librairie.model.Document.Utils.Bill;
 import ca.cal.librairie.model.Document.Utils.BorrowDoc;
 import ca.cal.librairie.model.User.Admin;
 import ca.cal.librairie.model.User.Client;
@@ -19,6 +20,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
@@ -49,7 +52,7 @@ public class LibrairieApplication {
                     .email("robin@gmail.com")
                     .password("password")
                     .address(null)
-                    .borrowDocs(new HashSet<>())
+                    .borrowDocs(new LinkedList<>())
                     .fine(10)
                     .build();
 
@@ -135,7 +138,7 @@ public class LibrairieApplication {
                     .editor("Rare")
                     .dateOfPublication(LocalDate.of(2010, 4, 20))
                     .numberPage(30)
-                    .exemplary(3)
+                    .exemplary(1)
                     .genre("Action")
                     .build();
 
@@ -147,18 +150,43 @@ public class LibrairieApplication {
                     .exemplary(3).build();
 
             BorrowDoc borrowDoc = BorrowDoc.builder()
-                    .dateBorrowing(LocalDate.of(2000, 10, 8))
-                    .dateReturn(LocalDate.of(2000, 11, 9))
+                    .dateBorrowing(LocalDate.of(2022, 4, 8))
+                    .dateReturn(LocalDate.of(2022, 4, 28))
                     .client(client1)
                     .document(book1)
+                    .lateReturnDay(20)
+                    .returned(false)
                     .build();
 
+            BorrowDoc borrowDoc2 = BorrowDoc.builder()
+                    .dateBorrowing(LocalDate.of(2025, 10, 8))
+                    .dateReturn(LocalDate.of(2025, 11, 9))
+                    .client(client1)
+                    .document(cd)
+                    .returned(true)
+                    .build();
+
+            Bill bill = Bill.builder()
+                    .client(client1)
+                    .accountBalanceAfter(0)
+                    .accountBalanceBefore(23)
+                    .amount(23)
+                    .paid(23)
+                    .paidOn(LocalDate.of(2022,4,30))
+                    .build();
+
+            List<Bill> Bills = new LinkedList<>();
+            Bills.add(bill);
             clientService.addBook(book);
             clientService.addBook(book1);
             clientService.addCD(cd);
 
             client1.addBorrowBook(borrowDoc);
+            client1.addBorrowBook(borrowDoc2);
+            client1.setBills(Bills);
             borrowDoc.setClient(client1);
+            borrowDoc2.setClient(client1);
+
 
             client1.setAddress(address1);
             client2.setAddress(address2);
@@ -176,5 +204,4 @@ public class LibrairieApplication {
 
         };
     }
-
 }

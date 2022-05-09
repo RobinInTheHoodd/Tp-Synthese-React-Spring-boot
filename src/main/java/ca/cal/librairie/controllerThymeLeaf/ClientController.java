@@ -1,4 +1,4 @@
-package ca.cal.librairie.controller;
+package ca.cal.librairie.controllerThymeLeaf;
 
 import ca.cal.librairie.model.Document.DocumentDto.Forms.BillForm;
 import ca.cal.librairie.model.Document.DocumentDto.Forms.BorrowForm;
@@ -62,7 +62,7 @@ public class ClientController {
         try {
             borrowForm.setClient(id);
             logger.info("Emprunt: " + borrowForm);
-            List<BorrowDocDto> result = clientService.addBorrowDto(borrowForm);
+            List<BorrowDocDto> result = clientService.addBorrowForm(borrowForm);
 
             RedirectView redirectView = new RedirectView();
             redirectView.setContextRelative(true);

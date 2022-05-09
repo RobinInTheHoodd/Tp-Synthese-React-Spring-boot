@@ -63,9 +63,28 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientDto getClientDtoById(long id) {
         checkNotNull(clientRepository.findById(id));
-        System.out.println(clientRepository.findById(id));
         return modelMapper.map(clientRepository.findById(id).get(), ClientDto.class);
 
+    }
+
+    public ClientDto updateClientDto(@NotNull ClientDto clientDto) {
+        Client client = clientRepository.findById(Long.parseLong(clientDto.getId())).get();
+
+        client.setFirstName(clientDto.getFirstName());
+        client.setSecondName(clientDto.getSecondName());
+        client.setEmail(clientDto.getEmail());
+        client.setPassword(clientDto.getPassword());
+        client.setBitrhday(clientDto.getBitrhday());
+        client.setPhoneNumber(clientDto.getPhoneNumber());
+        client.getAddress().setHouseNumber(clientDto.getAddress().getHouseNumber());
+        client.getAddress().setStreetAddress(clientDto.getAddress().getStreetAddress());
+        client.getAddress().setCity(clientDto.getAddress().getCity());
+        client.getAddress().setState(clientDto.getAddress().getState());
+        client.getAddress().setZipCode(clientDto.getAddress().getZipCode());
+
+        clientRepository.save(client);
+
+        return modelMapper.map(client, ClientDto.class);
     }
 
     @Override
@@ -229,7 +248,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Transactional
     @Override
-    public List<BorrowDocDto> addBorrowDto(@NotNull BorrowForm borrowForm) {
+    public List<BorrowDocDto> addBorrowForm(@NotNull BorrowForm borrowForm) {
         BorrowDoc borrowDoc = new BorrowDoc();
         List<BorrowDocDto> result = new LinkedList<>();
 
@@ -259,6 +278,31 @@ public class ClientServiceImpl implements ClientService {
         return result;
     }
 
+    public void addBorrowDto(BorrowDocDto borrowDocDto) {
+        Document document = documentRepository.getById(Long.valueOf(borrowDocDto.getDocument().getId()));
+        Client client = clientRepository.getById(Long.valueOf(borrowDocDto.getClient().getId()));
+        BorrowDoc borrowDoc = new BorrowDoc();
+        borrowDoc.setClient(client);
+        borrowDoc.setDocument(document);
+
+        borrowDoc.getDocument().setExemplary(borrowDoc.getDocument().getExemplary() - 1);
+        borrowDoc.setReturned(false);
+        if (borrowDoc.getDocument().getType().equals("Book")) {
+            borrowDoc.setDateBorrowing(LocalDate.now());
+            borrowDoc.setDateReturn(LocalDate.now().plusDays(21));
+        } else if (borrowDoc.getDocument().getType().equals("CD")) {
+            borrowDoc.setDateBorrowing(LocalDate.now());
+            borrowDoc.setDateReturn(LocalDate.now().plusDays(14));
+        } else {
+            borrowDoc.setDateBorrowing(LocalDate.now());
+            borrowDoc.setDateReturn(LocalDate.now().plusDays(7));
+        }
+        borrowDoc.setLateReturnDay(0);
+
+        borrowDocRepository.save(borrowDoc);
+
+    }
+
     public Document getDocumentById(Long documentDtoId) {
 
         return documentRepository.getById(documentDtoId);
@@ -275,9 +319,22 @@ public class ClientServiceImpl implements ClientService {
         }).collect(Collectors.toList());
     }
 
+    public Long updateBorrow(@NotNull BorrowDocDto borrowDocDto) {
+        BorrowDoc borrowDoc = borrowDocRepository.getById(Long.parseLong(borrowDocDto.getId()));
+        borrowDoc.getDocument().setExemplary(borrowDoc.getDocument().getExemplary() + 1);
+        borrowDoc.setLateReturnDay(borrowDocDto.getLateReturnDay());
+        borrowDoc.setReturned(borrowDocDto.isReturned());
+
+        borrowDocRepository.save(borrowDoc);
+
+
+        return borrowDoc.getId();
+    }
+
+
     @Transactional
     @Override
-    public Long addBill(@NotNull BillForm billForm) {
+    public Long addBill(BillForm billForm) {
 
         Client client = clientRepository.getById(Long.parseLong(billForm.getIdClient()));
 

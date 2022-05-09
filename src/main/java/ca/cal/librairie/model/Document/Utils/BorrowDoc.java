@@ -22,13 +22,13 @@ public class BorrowDoc {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
-    @ToString.Exclude
+
     @JsonIgnore
+    @ToString.Exclude
     private Client client;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DOCUMENT_ID")
-    @ToString.Exclude
     private Document document;
 
     private LocalDate dateBorrowing;

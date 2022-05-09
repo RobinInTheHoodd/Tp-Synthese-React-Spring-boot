@@ -2,6 +2,7 @@ package ca.cal.librairie.model.Document.DocumentDto.UtilsDto;
 
 import ca.cal.librairie.model.Document.DocumentDto.documentDto;
 import ca.cal.librairie.model.User.Dto.ClientDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 public class BorrowDocDto {
 
     private String id;
+    @JsonIgnore
     private ClientDto client;
     private documentDto document;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -19,6 +21,7 @@ public class BorrowDocDto {
     private LocalDate dateReturn;
     private int lateReturnDay;
     private boolean returned;
+
 
 
 }

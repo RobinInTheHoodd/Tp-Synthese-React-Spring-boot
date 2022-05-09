@@ -3,7 +3,9 @@ package ca.cal.librairie.model.User.Dto;
 import ca.cal.librairie.model.Document.Utils.Bill;
 import ca.cal.librairie.model.Document.Utils.BorrowDoc;
 import ca.cal.librairie.model.User.Dto.UtilsDto.AddressDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -13,6 +15,7 @@ import java.util.Set;
 
 @Data
 public class ClientDto {
+
 
     private String id;
     private String firstName;
@@ -24,7 +27,12 @@ public class ClientDto {
     private String email;
     private AddressDto address;
     private double fine;
-    private Set<BorrowDoc> borrowDocs;
+
+    @ToString.Exclude
+    @JsonIgnore
+    private List<BorrowDoc> borrowDocs;
+    @ToString.Exclude
+    @JsonIgnore
     private List<Bill> bills;
 
 

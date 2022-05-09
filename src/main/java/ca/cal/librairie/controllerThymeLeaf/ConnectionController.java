@@ -1,4 +1,4 @@
-package ca.cal.librairie.controller;
+package ca.cal.librairie.controllerThymeLeaf;
 
 import ca.cal.librairie.model.User.Dto.AdminDto;
 import ca.cal.librairie.model.User.Dto.ClientDto;

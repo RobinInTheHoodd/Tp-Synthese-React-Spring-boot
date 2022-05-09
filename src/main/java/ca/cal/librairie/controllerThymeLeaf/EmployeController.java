@@ -1,4 +1,4 @@
-package ca.cal.librairie.controller;
+package ca.cal.librairie.controllerThymeLeaf;
 
 
 import ca.cal.librairie.model.Document.DocumentDto.Forms.BillForm;

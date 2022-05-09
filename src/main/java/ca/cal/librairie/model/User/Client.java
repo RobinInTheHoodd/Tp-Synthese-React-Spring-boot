@@ -33,7 +33,7 @@ public class Client extends User {
 
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private Set<BorrowDoc> borrowDocs = new HashSet<>();
+    private List<BorrowDoc> borrowDocs = new LinkedList<>();
 
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude

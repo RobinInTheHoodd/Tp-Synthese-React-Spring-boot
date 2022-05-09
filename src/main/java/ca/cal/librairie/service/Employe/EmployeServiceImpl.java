@@ -15,6 +15,7 @@ import ca.cal.librairie.model.User.Client;
 import ca.cal.librairie.model.User.Dto.ClientDto;
 import ca.cal.librairie.model.User.Dto.EmployeDto;
 import ca.cal.librairie.model.User.Dto.UtilsDto.AddressDto;
+import ca.cal.librairie.model.User.Employe;
 import ca.cal.librairie.persistence.Documents.BookRepository;
 import ca.cal.librairie.persistence.Documents.CDRepository;
 import ca.cal.librairie.persistence.Documents.DVDRepository;
@@ -69,6 +70,58 @@ public class EmployeServiceImpl implements EmployeService {
         } else throw new NullPointerException("Aucun Employé avec cette Id : " + id);
     }
 
+    @Override
+    public List<EmployeDto> getEmployesDto() {
+        return employeRepository.findAll().stream().map(employe ->
+                modelMapper.map(employe, EmployeDto.class) ).collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public void addEmploye(@NotNull EmployeDto employeDto) {
+        if (employeDto.getId().equals("")) {
+            Employe employe = modelMapper.map(employeDto, Employe.class);
+
+            employeRepository.save(employe);
+        } else {
+
+            updateEmployeDto(employeDto);
+        }
+    }
+
+    @Transactional
+    @Override
+    public void deleteEmploye(@NotNull EmployeDto employeDto) throws IllegalAccessException {
+        if (employeDto.getId().equals("")) {
+            throw new IllegalAccessException("L'employe n'existe pas");
+        } else {
+            employeRepository.deleteById(Long.parseLong(employeDto.getId()));
+        }
+    }
+
+
+
+    @Transactional
+    @Override
+    public void updateEmployeDto(EmployeDto employeDto) {
+        Employe employe = employeRepository.findById(Long.parseLong(employeDto.getId())).get();
+
+        employe.setFirstName(employeDto.getFirstName());
+        employe.setSecondName(employeDto.getSecondName());
+        employe.setEmail(employeDto.getEmail());
+        employe.setPassword(employeDto.getPassword());
+        employe.setBitrhday(employeDto.getBitrhday());
+        employe.setPhoneNumber(employeDto.getPhoneNumber());
+        employe.getAddress().setHouseNumber(employeDto.getAddress().getHouseNumber());
+        employe.getAddress().setStreetAddress(employeDto.getAddress().getStreetAddress());
+        employe.getAddress().setCity(employeDto.getAddress().getCity());
+        employe.getAddress().setState(employeDto.getAddress().getState());
+        employe.getAddress().setZipCode(employeDto.getAddress().getZipCode());
+
+        employeRepository.save(employe);
+    }
+
+
     @Transactional
     @Override
     public ClientDto addClientDto(@NotNull ClientDto client) {
@@ -87,6 +140,7 @@ public class EmployeServiceImpl implements EmployeService {
     public List<ClientDto> getClientsDto() {
         return clientRepository.findAll().stream().map(client -> {
             modelMapper.map(client.getAddress(), AddressDto.class);
+            client.setBorrowDocs(clientRepository.getBorrowDocById(client.getId()));
             return modelMapper.map(client, ClientDto.class);
         }).collect(Collectors.toList());
     }
@@ -119,7 +173,7 @@ public class EmployeServiceImpl implements EmployeService {
     @Override
     public void addDocDto(@NotNull documentDto documentDto) {
 
-        if (documentDto.getId().equals("")) {
+        if (documentDto.getId() == null || documentDto.getId().equals("") ) {
             if (documentDto.getType().equals("Book")) {
                 bookRepository.save(modelMapper.map(documentDto, Book.class));
             } else if (documentDto.getType().equals("CD")) {
@@ -130,11 +184,27 @@ public class EmployeServiceImpl implements EmployeService {
                 dvdRepository.save(modelMapper.map(documentDto, DVD.class));
             }
         } else {
+            if (documentDto.getType().equals("Book")){
+                Book book = bookRepository.getById(Long.parseLong(documentDto.getId()));
+                book.setAuthor(documentDto.getAuthor());
+                book.setType(documentDto.getType());
+                book.setEditor(documentDto.getEditor());
+                book.setTitle(documentDto.getTitle());
+                book.setDateOfPublication(documentDto.getDateOfPublication());
+                book.setExemplary(documentDto.getExemplary());
+                book.setGenre(documentDto.getGenre());
+                book.setNumberPage(documentDto.getNumberPage());
+                bookRepository.save(book);
+            }
+
+
             Document document = bookRepository.getDocById(Long.parseLong(documentDto.getId()));
             document.setAuthor(documentDto.getAuthor());
             document.setType(documentDto.getType());
             document.setEditor(documentDto.getEditor());
+            document.setTitle(documentDto.getTitle());
             document.setDateOfPublication(documentDto.getDateOfPublication());
+
             document.setExemplary(documentDto.getExemplary());
             documentRepository.save(document);
         }
@@ -298,23 +368,60 @@ public class EmployeServiceImpl implements EmployeService {
         return modelMapper.map(bill, BillDto.class);
     }
 
+    @Override
+    public List<BillDto> getBillsByIdClient(long idClient) {
+        return billRepository.getBillByClientId(idClient).stream().map(bill -> {
+            return modelMapper.map(bill, BillDto.class);
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteBill(long id) {
+        if (billRepository.existsById(id)) {
+            billRepository.deleteById(id);
+        } else throw new NullPointerException("Aucun Emprunt avec l'id :" + id);
+    }
+
+
+    @Override
+    public List<BorrowDocDto> getClientBorrowId(long id) {
+
+        if (clientRepository.getBorrowDocById(id).isEmpty()){
+            return new LinkedList<>();
+        } else {
+            return clientRepository.getBorrowDocById(id).stream().map(borrowDoc -> {
+                modelMapper.map(borrowDoc.getDocument(), documentDto.class);
+                return modelMapper.map(borrowDoc, BorrowDocDto.class);
+            } ).collect(Collectors.toList());
+
+
+        }
+
+    }
+
     @Transactional
     @Override
-    public Long updateBorrow(@NotNull BorrowDocDto borrowDocDto) {
+    public Long updateBorrow( BorrowDocDto borrowDocDto) {
         BorrowDoc borrowDoc = borrowDocRepository.getById(Long.parseLong(borrowDocDto.getId()));
 
-        borrowDoc.setDocument(dvdRepository.getDocId(Long.parseLong(borrowDocDto.getDocument().getId())));
-        borrowDoc.setClient(clientRepository.getById(Long.parseLong(borrowDocDto.getClient().getId())));
-
+        if(borrowDocDto.getClient() != null){
+            borrowDoc.setClient(clientRepository.getById(Long.parseLong(borrowDocDto.getClient().getId())));
+        }
+        if(borrowDocDto.getDocument() != null){
+            borrowDoc.setDocument(documentRepository.getById(Long.parseLong(borrowDocDto.getDocument().getId())));
+        }
         borrowDoc.setReturned(borrowDocDto.isReturned());
+        if(borrowDoc.isReturned()){
+            borrowDoc.getDocument().setExemplary(borrowDoc.getDocument().getExemplary() + 1);
+        } else  borrowDoc.getDocument().setExemplary(borrowDoc.getDocument().getExemplary() - 1);
+
+
+
         borrowDoc.setDateBorrowing(borrowDocDto.getDateBorrowing());
         borrowDoc.setDateReturn(borrowDocDto.getDateReturn());
         borrowDoc.setLateReturnDay(borrowDocDto.getLateReturnDay());
         borrowDocRepository.save(borrowDoc);
-
-        System.out.println(borrowDoc);
         return borrowDoc.getId();
-
     }
 
     @Transactional
@@ -345,5 +452,7 @@ public class EmployeServiceImpl implements EmployeService {
         }
         return modelMapper.map(borrowDocRepository.getBorrowDocBy(id).get(0), BorrowDocDto.class);
     }
+
+
 
 }

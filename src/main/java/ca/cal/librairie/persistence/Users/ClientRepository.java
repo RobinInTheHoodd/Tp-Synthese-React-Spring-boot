@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 
 @Repository
@@ -19,6 +19,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     List<BorrowDoc> getAllBorrowDoc(long identif);
 
     @Query("SELECT c.borrowDocs FROM Client c WHERE c.id = :identif")
-    Optional<BorrowDoc> getBorrowDocById(long identif);
+    List<BorrowDoc> getBorrowDocById(long identif);
 
 }
