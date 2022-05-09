@@ -13,9 +13,8 @@ const useFetch = () => {
     
     const clients = await fetchDataClient();
     const employes = await fetchDataEmploye();
-    const admins = await fetchDataAdmin();
 
-    const users = clients.concat(employes, admins);
+    const users = clients.concat(employes);
     setData(users);
    
   }
@@ -32,15 +31,6 @@ const useFetch = () => {
     const response = await UserDataService.getEmployes();
     const json = await response.data.map( (employe) => {
       return {...employe, 'grade':'Employe'};
-    });
-    
-    return json;
-  }
-
-  async function fetchDataAdmin() {
-    const response = await UserDataService.getAdmins();
-    const json = await response.data.map( (admin) => {
-      return {...admin, 'grade':'Admin'};
     });
     
     return json;

@@ -172,6 +172,7 @@ export default function SearchDocumentsEmploye() {
 
     const handleCancel = () => {
         setSelectedEditDocument(false);
+        setNewDocument(false);
     }
 
     const submitNewBorrow = () => {

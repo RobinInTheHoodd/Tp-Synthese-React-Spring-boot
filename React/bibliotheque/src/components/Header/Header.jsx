@@ -15,6 +15,7 @@ const headerEmploye = {
     searchDocuments: 'Reherche de document',
     borrowDocs: 'Emprunts',
     bills: 'Factures',
+    newEmploye: 'newEmploye',
     deconnect: 'Déconnecter'
 }
 

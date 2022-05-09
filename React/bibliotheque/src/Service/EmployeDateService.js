@@ -4,10 +4,19 @@ const API_URL = "http://localhost:8080/"
 
 class EmployeDataService {
 
+    getEmployes(id){
+        return axios.get(`${API_URL}` +id+`/employe/employes`);
+    }
     getEmployeById(id){
         return axios.get(`${API_URL}` +id+`/employe/getEmploye`);
     }
-    updateEmployeById(employe ,id){
+    addEmploye(employe , id){
+        return axios.post(`${API_URL}` +id+`/employe/newEmploye`, employe);
+    }
+    deleteEmploye(employe , id){
+        return axios.post(`${API_URL}` +id+`/employe/deleteEmploye`, employe);
+    }
+    updateEmploye(employe , id){
         return axios.post(`${API_URL}` +id+`/employe/editEmploye`, employe);
     }
     getClients(id){

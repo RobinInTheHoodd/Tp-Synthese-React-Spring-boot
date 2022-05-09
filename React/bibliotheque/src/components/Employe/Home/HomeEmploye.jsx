@@ -74,7 +74,7 @@ export default function HomeEmploye() {
     const handleSubmitNewEmploye = (event) => {
         event.preventDefault();
 
-        EmployeDateService.updateEmployeById(editEmploye, employe[0].id).then(() => {
+        EmployeDateService.updateEmploye(editEmploye, employe[0].id).then(() => {
             fetchDataEmploye();
         })
         setEditEmploye(false);
