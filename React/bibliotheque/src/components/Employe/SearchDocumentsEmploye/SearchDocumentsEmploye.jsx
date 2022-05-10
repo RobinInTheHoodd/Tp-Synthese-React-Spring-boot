@@ -1,9 +1,9 @@
 import Header from "../../Header/Header"
 import {useLocation, useNavigate} from 'react-router-dom';
+import styled from 'styled-components';
 import React, {useEffect, useState} from 'react';
 import DataTable from 'react-data-table-component';
 import ClientDataService from "../../../Service/ClientDataService";
-import FormSearchDoc from "../../Form/FormSearchDoc";
 import FormDocument from "../../Form/FormDocument";
 import EmployeDateService from "../../../Service/EmployeDateService";
 import {BsFillTrashFill} from "react-icons/bs";
@@ -11,9 +11,96 @@ import {AiFillPlusCircle} from "react-icons/ai";
 import ModalTable from "../../utils/ModalTable";
 import {columnsClients} from "../../Client/Home/HomeClient";
 
+
+export const TextField = styled.input`
+	height: 32px;
+	width: 200px;
+	border-radius: 3px;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	border: 1px solid #e5e5e5;
+	padding: 0 32px 0 16px;
+
+	&:hover {
+		cursor: pointer;
+	}
+`;
+
+
+export const FilterComponent = ({
+                                    typeDocument, filterType,
+                                    titleDocument, filterTitle,
+                                    authorDocument, filterAuthor,
+                                    editorDocument, filterEditor,
+                                    genreDocument, filterGenre,
+                                    filterText, onFilter, onClear
+                                }) => (
+    <>
+        <select name='type' value={typeDocument} onChange={(event) => filterType(event)}>
+            <option value="all">Tous</option>
+            <option value="Book">Livre</option>
+            <option value="CD">CD</option>
+            <option value="DVD">DVD</option>
+        </select>
+
+        <label>Titre:
+            <input
+                type="checkbox"
+                name="title"
+                value={titleDocument}
+                checked={titleDocument}
+                onChange={filterTitle}
+            />
+        </label>
+
+        <label>Autheur:
+            <input
+                type="checkbox"
+                name="author"
+                value={authorDocument}
+                checked={authorDocument}
+                onChange={filterAuthor}
+            />
+        </label>
+        <label>Editeur:
+            <input
+                type="checkbox"
+                name="editor"
+                value={editorDocument}
+                checked={editorDocument}
+                onChange={filterEditor}
+            />
+        </label>
+        <label>Genre :
+            <input
+                type="checkbox"
+                name="genre"
+                value={genreDocument}
+                checked={genreDocument}
+                onChange={filterGenre}
+            />
+        </label>
+        <TextField
+            name="search"
+            type="text"
+            placeholder="Recherche"
+            aria-label="Search Input"
+            value={filterText}
+            onChange={onFilter}
+        />
+        <button type="button" onClick={onClear}>
+            X
+        </button>
+    </>
+);
+
+
 const modelDocument = {
     id: '', type: '', title: '', author: '', editor: '', dateOfPublication: '', numberPage: '', exemplary: '', genre: ''
 }
+
 export const columnsDocuments = (buttonEditDocument, buttonDeleteDocument) => [{
     cell: (row) => <button onClick={() => buttonEditDocument(row)}> Modifier</button>,
     name: 'Modifier',
@@ -88,30 +175,144 @@ export default function SearchDocumentsEmploye() {
     const [documentsForBorrow, setDocumentsForBorrow] = React.useState(false);
     const [selectedEditDocument, setSelectedEditDocument] = React.useState(false);
 
-    const [searchBar, setSearchBar] = useState({
-        type: "all", title: false, author: false, editor: false, genre: false, research: ''
-    });
-
-
     const [toggledClearRows, setToggleClearRows] = React.useState(false);
 
 
-    const handleChangeSearchBar = (event) => {
-        event.preventDefault();
-        const name = event.target.name;
-        const value = event.target.value;
-        const check = event.target.checked;
-        if (name === 'research' || name === 'type') {
-            setSearchBar(values => ({...values, [name]: value}));
+    const [filterText, setFilterText] = React.useState('');
+    const [typeDocument, setTypeDocument] = React.useState('all');
+    const [titleDocument, setTitleDocument] = React.useState(false);
+    const [authorDocument, setAuthorDocument] = React.useState(false);
+    const [editorDocument, setEditorDocument] = React.useState(false);
+    const [genreDocument, setGenreDocument] = React.useState(false);
+    const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
+
+
+    const filteredItems = () => {
+        if (typeDocument !== 'all') {
+            if (titleDocument === true) {
+                return documents.filter(
+                    item => item.title && item.title.toLowerCase().includes(filterText.toLowerCase()) &&
+                        item.type && item.type.includes(typeDocument),
+                );
+            } else if (authorDocument === true) {
+                return documents.filter(
+                    item => item.author && item.author.toLowerCase().includes(filterText.toLowerCase()) &&
+                        item.type && item.type.includes(typeDocument),
+                );
+            } else if (editorDocument === true) {
+                return documents.filter(
+                    item => item.editor && item.editor.toLowerCase().includes(filterText.toLowerCase()) &&
+                        item.type && item.type.includes(typeDocument),
+                );
+            } else if (genreDocument === true) {
+                return documents.filter(
+                    item => item.genre && item.genre.toLowerCase().includes(filterText.toLowerCase()) &&
+                        item.type && item.type.includes(typeDocument),
+                );
+            } else return documents.filter(
+                item => item.type && item.type.toLowerCase().includes(typeDocument.toLowerCase()),
+            );
         } else {
-            setSearchBar({...searchBar, [name]: check});
+            if (titleDocument === true) {
+                return documents.filter(
+                    item => item.title && item.title.toLowerCase().includes(filterText.toLowerCase()),
+                );
+            } else if (authorDocument === true) {
+                return documents.filter(
+                    item => item.author && item.author.toLowerCase().includes(filterText.toLowerCase()),
+                );
+            } else if (editorDocument === true) {
+                return documents.filter(
+                    item => item.editor && item.editor.toLowerCase().includes(filterText.toLowerCase()),
+                );
+            } else if (genreDocument === true) {
+                return documents.filter(
+                    item => item.genre && item.genre.toLowerCase().includes(filterText.toLowerCase()),
+                );
+            } else return documents;
         }
+
     }
 
-    const submitSearchBar = (event) => {
-        event.preventDefault();
-        fetchDataDocuments(searchBar);
-    };
+    const subHeaderComponentMemo = React.useMemo(() => {
+
+        const handleClear = () => {
+            if (filterText || typeDocument !== 'all' || titleDocument || authorDocument || editorDocument || genreDocument) {
+                setResetPaginationToggle(!resetPaginationToggle);
+                setFilterText('');
+                setTypeDocument('all');
+                setTitleDocument(false);
+                setAuthorDocument(false);
+                setGenreDocument(false);
+                setEditorDocument(false);
+            }
+        };
+
+        const filterType = (event) => {
+            event.preventDefault();
+            const name = event.target.name;
+            const value = event.target.value;
+            setTypeDocument(value);
+
+        };
+
+        const filterTitle = (event) => {
+            event.preventDefault();
+            const checked = event.target.checked;
+            if (checked === true) {
+                setAuthorDocument(false);
+                setGenreDocument(false);
+                setEditorDocument(false);
+            }
+            setTitleDocument(checked);
+
+        };
+
+        const filterAuthor = (event) => {
+            event.preventDefault();
+            const checked = event.target.checked;
+            if (checked === true) {
+                setTitleDocument(false)
+                setGenreDocument(false);
+                setEditorDocument(false);
+            }
+            setAuthorDocument(checked);
+        };
+
+        const filterEditor = (event) => {
+            event.preventDefault();
+            const checked = event.target.checked;
+            if (checked === true) {
+                setTitleDocument(false)
+                setAuthorDocument(false);
+                setGenreDocument(false);
+            }
+            setEditorDocument(checked);
+        };
+
+        const filterGenre = (event) => {
+            event.preventDefault();
+            const checked = event.target.checked;
+            if (checked === true) {
+                setTitleDocument(false)
+                setAuthorDocument(false);
+                setEditorDocument(false);
+            }
+            setGenreDocument(checked);
+        };
+
+        return (
+            <FilterComponent typeDocument={typeDocument} titleDocument={titleDocument} filterTitle={filterTitle}
+                             filterType={filterType} onFilter={e => setFilterText(e.target.value)} onClear={handleClear}
+                             filterText={filterText}
+                             authorDocument={authorDocument} filterAuthor={filterAuthor}
+                             editorDocument={editorDocument} filterEditor={filterEditor}
+                             genreDocument={genreDocument} filterGenre={filterGenre}
+
+            />
+        );
+    }, [filterText, typeDocument, authorDocument, titleDocument, editorDocument, genreDocument, resetPaginationToggle]);
+
 
     const buttonEditDocument = (selectedDocument) => {
         setSelectedEditDocument(selectedDocument);
@@ -214,13 +415,6 @@ export default function SearchDocumentsEmploye() {
             {documents && <div className="contentContainer">
                 <div className="container_document">
                     <h2>Documents :</h2>
-                    <div className="searchContainer">
-                        <FormSearchDoc
-                            searchBar={searchBar}
-                            handleChange={handleChangeSearchBar}
-                            handleSubmit={submitSearchBar}
-                        />
-                    </div>
                     <br/><br/>
                     <AiFillPlusCircle
                         onClick={() => buttonNewDocument()}
@@ -229,11 +423,13 @@ export default function SearchDocumentsEmploye() {
                     />
                     <DataTable
                         columns={columnsDocuments(buttonEditDocument, buttonDeleteDocument)}
-                        data={documents}
+                        data={filteredItems()}
                         selectableRows
                         selectableRowDisabled={DisabledSelectDocumentCriteria}
                         onSelectedRowsChange={selectDocumentsForBorrow}
                         clearSelectedRows={toggledClearRows}
+                        subHeader
+                        subHeaderComponent={subHeaderComponentMemo}
                         striped
                         pagination
                         defaultSortFieldId={2}
