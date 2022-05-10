@@ -6,9 +6,8 @@ import DataTable from "react-data-table-component";
 import {AiFillCheckCircle} from "react-icons/ai";
 import {ImCross} from "react-icons/im";
 import {BsFillTrashFill} from "react-icons/bs";
-import FormBorrow from "./FormBorrows";
+import FormBorrow from "../../Form/FormBorrows";
 
-//TODO supprimer emprunts
 
 const columnsBorrowDocs = (handleEditBorrow, handleDeleteBorrow) => [{
     cell: (row) => <button onClick={() => handleEditBorrow(row)}>Modifier</button>,
@@ -118,7 +117,9 @@ export default function Borrows() {
 
     const handleDeleteBorrow = (selectedBorrow) => {
         EmployeDateService.deleteBorrow(employe[0].id, selectedBorrow)
-            .then(() => {refresDataBorrows(employe[0].id)});
+            .then(() => {
+                refresDataBorrows(employe[0].id)
+            });
     }
 
     const handleCancel = () => {

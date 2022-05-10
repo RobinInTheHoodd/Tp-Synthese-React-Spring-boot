@@ -3,8 +3,7 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 import DataTable from 'react-data-table-component';
 import ClientDataService from "../../../Service/ClientDataService";
-
-import FormSearchDoc from "./FormSearchDoc";
+import FormSearchDoc from "../../Form/FormSearchDoc";
 import {columnsDocuments} from "../Home/HomeClient";
 
 

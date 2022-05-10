@@ -67,27 +67,27 @@ export default function Login({dataUser}) {
 
 
     return (<div>
-            <div>
-                <h1>Login :</h1>
-                <br/>
-                <p> Veuillez selectionner un utilisateur :</p>
-            </div>
+        <div>
+            <h1>Login :</h1>
+            <br/>
+            <p> Veuillez selectionner un utilisateur :</p>
+        </div>
+        <hr/>
+        <>
+            <DataTable
+                columns={columnsUser}
+                data={dataUser}
+                selectableRows
+                selectableRowsSingle
+                onSelectedRowsChange={ChangeSelectedUser}
+                clearSelectedRows={toggledClearSelectedUser}
+                dense
+            />
             <hr/>
-            <>
-                <DataTable
-                    columns={columnsUser}
-                    data={dataUser}
-                    selectableRows
-                    selectableRowsSingle
-                    onSelectedRowsChange={ChangeSelectedUser}
-                    clearSelectedRows={toggledClearSelectedUser}
-                    dense
-                />
-                <hr/>
-                {selectedUser !== undefined && <button onClick={loginSubmit}>
-                    Connecté
-                </button>}
-            </>
+            {selectedUser !== undefined && <button onClick={loginSubmit}>
+                Connecté
+            </button>}
+        </>
 
-        </div>);
+    </div>);
 }

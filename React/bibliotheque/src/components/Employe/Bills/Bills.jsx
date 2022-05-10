@@ -4,10 +4,9 @@ import {useLocation} from "react-router-dom";
 import EmployeDateService from "../../../Service/EmployeDateService";
 import DataTable from "react-data-table-component";
 import {BsFillTrashFill} from "react-icons/bs";
-import FormBills from "./FormBills";
+import FormBills from "../../Form/FormBills";
+import {columnsClients} from "../../Client/Home/HomeClient";
 
-
-//TODO supprimer emprunts
 
 const columnsBills = (handleEditBills, handleDeleteBill) => [{
     cell: (row) => <button onClick={() => handleEditBills(row)}>Modifier</button>,
@@ -168,6 +167,7 @@ export default function EmployeBills() {
 
                     OnpenModalClient={OnpenModalClient}
                     setOpenModalClient={setOpenModalClient}
+                    columns={columnsClients}
                     clients={clients}
                     selectClientModal={selectClientModal}
                     isOpenModalClient={isOpenModalClient}

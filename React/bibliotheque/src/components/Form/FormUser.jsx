@@ -1,8 +1,8 @@
 
-import FormAdress from "./EditClientAddress";
+import FormAdress from "./FormAddress";
 import React from "react";
 
-export default function EditClient({handleSubmit, handleChangeClient, handleChangeClientAddress, client, handleCancel}) {
+export default function FormUser({handleSubmit, handleChangeClient, handleChangeClientAddress, client, handleCancel}) {
 
     
     return (

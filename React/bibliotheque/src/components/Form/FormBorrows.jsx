@@ -1,6 +1,6 @@
 import React from "react";
-import ModalClients from "../SearchDocumentsEmploye/ModalClients";
-import ModalDocument from "../SearchDocumentsEmploye/ModalDocument";
+import ModalTable from "../utils/ModalTable";
+import {columnsClients, columnsDocuments} from "../Client/Home/HomeClient";
 
 
 export default function FormBorrow(
@@ -68,24 +68,26 @@ export default function FormBorrow(
                 <button onClick={OnpenModalClient}> Modifier Client:</button>
                 <br/><br/>
                 {isOpenModalClient &&
-                    <ModalClients
+                    <ModalTable
+                        columns={columnsClients}
                         setIsOpen={setOpenModalClient}
-                        Clients={clients}
-                        handleSelectClient={selectClientModal}
+                        data={clients}
+                        handleSelectData={selectClientModal}
                         toggledClearRows={toggledClearRows}
-                        submitBorrow={submitClientModal}
+                        submitData={submitClientModal}
                     />
                 }
 
                 <button onClick={OnpenModalDocument}> Modifier Document:</button>
                 <br/><br/>
                 {isOpenModalDocument &&
-                    <ModalDocument
+                    <ModalTable
+                        columns={columnsDocuments}
                         setIsOpen={setOpenModalDocument}
-                        documents={document}
-                        handleSelectDocument={selectDocumentModal}
+                        data={document}
+                        handleSelectData={selectDocumentModal}
                         toggledClearRows={toggledClearRows}
-                        submitDocument={submitDocument}
+                        submitData={submitDocument}
                     />
                 }
 

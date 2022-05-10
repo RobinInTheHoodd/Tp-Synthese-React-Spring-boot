@@ -36,7 +36,7 @@ export default function Header({headerFor, user}) {
             return headerForUser(headerClient)
         } else if (headerFor === 'employe') {
             return headerForUser(headerEmploye);
-        } else return headerForUser(headerAdmin);
+        }
     }
 
 

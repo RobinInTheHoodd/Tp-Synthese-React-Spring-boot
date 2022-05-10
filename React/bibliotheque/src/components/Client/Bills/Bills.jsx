@@ -38,7 +38,8 @@ export default function Bills() {
             }, client[0].id
         ).then(
             () => {
-                fetchDataBills().then(r => {});
+                fetchDataBills().then(r => {
+                });
                 UserDataService.getClientsById(client[0].id).then(
                     response => {
                         console.log(response.data);

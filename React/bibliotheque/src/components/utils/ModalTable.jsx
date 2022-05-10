@@ -1,4 +1,4 @@
-import Modal from "../../utils/Modal";
+import Modal from "./Modal";
 import React from "react";
 import DataTable from 'react-data-table-component';
 
@@ -19,15 +19,15 @@ const columnsClient = [{
 }, {
     name: 'Solde', selector: row => row.fine + ' $', sortable: true
 },];
-export default function ModalClients({setIsOpen, Clients, handleSelectClient, toggledClearRows, submitBorrow}) {
+export default function ModalClients({columns ,setIsOpen, data, handleSelectData, toggledClearRows, submitData}) {
 
     const TableClients = <div className="tableModalClient">
         <DataTable
-            columns={columnsClient}
-            data={Clients}
+            columns={columns}
+            data={data}
             selectableRows
             selectableRowsSingle
-            onSelectedRowsChange={handleSelectClient}
+            onSelectedRowsChange={handleSelectData}
             clearSelectedRows={toggledClearRows}
         />
     </div>;
@@ -37,7 +37,7 @@ export default function ModalClients({setIsOpen, Clients, handleSelectClient, to
             title={"Choisir un client :"}
             setIsOpen={setIsOpen}
             data={TableClients}
-            submitBorrow={submitBorrow}
+            submitBorrow={submitData}
         />
     </div>)
 

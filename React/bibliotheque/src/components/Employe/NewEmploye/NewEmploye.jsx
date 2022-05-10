@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import Header from "../../Header/Header";
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
-import EditClient from "../../Client/Home/EditClient"
-import {AiFillCheckCircle, AiFillPlusCircle} from "react-icons/ai";
+import FormUser from "../../Form/FormUser"
+import {AiFillPlusCircle} from "react-icons/ai";
 import {ImCross} from "react-icons/im";
 import {BsFillTrashFill} from "react-icons/bs";
 import EmployeDateService from "../../../Service/EmployeDateService";
@@ -182,7 +182,7 @@ export default function NewEmploye({}) {
                     <div className="container">
                         <ImCross onClick={() => handleButtonCancel()}
                                  style={{'color': 'red', 'cursor': 'pointer'}}/>
-                        <EditClient
+                        <FormUser
                             handleChangeClient={handleChangeEditEmploye}
                             handleSubmit={handleSubmitEditEmploye}
                             handleChangeClientAddress={handleChangeEditEmployeAddress}
@@ -192,7 +192,7 @@ export default function NewEmploye({}) {
                     </div>
                 </>}
                 {newEmploye && <div className="newEmployeContainer">
-                    <EditClient
+                    <FormUser
                         handleChangeClient={handleChangeNewEmploye}
                         handleChangeClientAddress={handleChangeNewEmployeAddress}
                         handleSubmit={handleSubmitNewEmploye}

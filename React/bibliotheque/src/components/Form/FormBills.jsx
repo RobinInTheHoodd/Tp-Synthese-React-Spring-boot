@@ -1,5 +1,5 @@
 import React from "react";
-import ModalClients from "../SearchDocumentsEmploye/ModalClients";
+import ModalTable from "../utils/ModalTable";
 
 
 export default function FormBills(
@@ -10,6 +10,7 @@ export default function FormBills(
         handleCancel,
         toggledClearRows,
         clients,
+        columns,
         OnpenModalClient,
         isOpenModalClient,
         selectClientModal,
@@ -55,12 +56,13 @@ export default function FormBills(
                 <button onClick={OnpenModalClient}> Modifier Client:</button>
                 <br/><br/>
                 {isOpenModalClient &&
-                    <ModalClients
+                    <ModalTable
+                        columns={columns}
                         setIsOpen={setOpenModalClient}
-                        Clients={clients}
-                        handleSelectClient={selectClientModal}
+                        data={clients}
+                        handleSelectData={selectClientModal}
                         toggledClearRows={toggledClearRows}
-                        submitBorrow={submitClientModal}
+                        submitData={submitClientModal}
                     />
                 }
 

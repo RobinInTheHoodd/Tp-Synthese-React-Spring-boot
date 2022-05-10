@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import Header from "../../Header/Header";
 import {useLocation, useNavigate} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
-import EditClient from "../../Client/Home/EditClient"
+import FormUser from "../../Form/FormUser"
 import {AiFillCheckCircle, AiFillPlusCircle} from "react-icons/ai";
 import {ImCross} from "react-icons/im";
 import {BsFillTrashFill} from "react-icons/bs";
@@ -298,7 +298,7 @@ export default function Clients({}) {
                     <div className="container">
                         <ImCross onClick={() => handleButtonCancel()}
                                  style={{'color': 'red', 'cursor': 'pointer'}}/>
-                        <EditClient
+                        <FormUser
                             handleChangeClient={handleChangeEditClient}
                             handleSubmit={handleSubmitEditClient}
                             handleChangeClientAddress={handleChangeEditClientAddress}
@@ -328,7 +328,7 @@ export default function Clients({}) {
                     </div>
                 </>}
                 {newClient && <div className="newClientContainer">
-                    <EditClient
+                    <FormUser
                         handleChangeClient={handleChangeNewClient}
                         handleChangeClientAddress={handleChangeNewClientAddress}
                         handleSubmit={handleSubmitNewClient}

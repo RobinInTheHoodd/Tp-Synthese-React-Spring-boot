@@ -3,7 +3,7 @@ import Header from "../../Header/Header";
 import {useLocation} from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import ClientDataService from "../../../Service/ClientDataService";
-import EditClient from "./EditClient";
+import FormUser from "../../Form/FormUser";
 import {AiFillCheckCircle} from "react-icons/ai";
 import {ImCross} from "react-icons/im"
 
@@ -13,6 +13,24 @@ export const columnsClient = (handleButtonClick) => [{
     allowOverflow: true,
     button: true,
 }, {
+    name: 'id', selector: row => row.id, omit: true,
+}, {
+    name: 'Prénom', selector: row => row.firstName,
+}, {
+    name: 'Nom', selector: row => row.secondName,
+}, {
+    name: 'Email', selector: row => row.email,
+}, {
+    name: 'password', selector: row => row.password,
+}, {
+    name: 'Numéro de téléphone', selector: row => row.phoneNumber,
+}, {
+    name: 'Anniversaire', selector: row => row.bitrhday,
+}, {
+    name: 'Solde', selector: row => row.fine + ' $',
+},];
+
+export const columnsClients = [{
     name: 'id', selector: row => row.id, omit: true,
 }, {
     name: 'Prénom', selector: row => row.firstName,
@@ -199,7 +217,7 @@ export default function HomeClient() {
 
             <div className="editClientContainer">
                 {editClient && <div className="container">
-                    <EditClient
+                    <FormUser
                         handleChangeClient={handleChangeNewClient}
                         handleSubmit={handleSubmitNewClient}
                         handleChangeClientAddress={handleChangeAddressNewClient}

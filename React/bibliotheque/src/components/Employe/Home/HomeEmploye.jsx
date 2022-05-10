@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import Header from "../../Header/Header";
 import DataTable from "react-data-table-component";
 import EmployeDateService from "../../../Service/EmployeDateService";
-import EditClient from "../../Client/Home/EditClient";
+import FormUser from "../../Form/FormUser";
 
 const columnsEmploye = (handleButtonClick) => [{
     cell: () => <button onClick={handleButtonClick}>Modifier</button>,
@@ -98,7 +98,7 @@ export default function HomeEmploye() {
 
                 <div className="editClientContainer">
                     {editEmploye && <div className="container">
-                        <EditClient
+                        <FormUser
                             handleChangeClient={handleChangeNewEmploye}
                             handleSubmit={handleSubmitNewEmploye}
                             handleChangeClientAddress={handleChangeAddressNewEmploye}
@@ -106,8 +106,6 @@ export default function HomeEmploye() {
                         />
                     </div>}
                 </div>
-            </div>
-            }
-        </>
-    )
+            </div>}
+        </>)
 }

@@ -3,12 +3,13 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 import DataTable from 'react-data-table-component';
 import ClientDataService from "../../../Service/ClientDataService";
-import FormSearchDoc from "../../Client/SearchDocuments/FormSearchDoc";
-import FormDocument from "./FormDocument";
+import FormSearchDoc from "../../Form/FormSearchDoc";
+import FormDocument from "../../Form/FormDocument";
 import EmployeDateService from "../../../Service/EmployeDateService";
 import {BsFillTrashFill} from "react-icons/bs";
 import {AiFillPlusCircle} from "react-icons/ai";
-import ModalClients from "./ModalClients";
+import ModalTable from "../../utils/ModalTable";
+import {columnsClients} from "../../Client/Home/HomeClient";
 
 const modelDocument = {
     id: '', type: '', title: '', author: '', editor: '', dateOfPublication: '', numberPage: '', exemplary: '', genre: ''
@@ -254,12 +255,13 @@ export default function SearchDocumentsEmploye() {
 
                 }
                 {isOpenModalClient && <div className="modalClient">
-                    <ModalClients
+                    <ModalTable
+                        columns={columnsClients}
                         setIsOpen={setIsOpenModalClient}
-                        Clients={modalClients}
-                        handleSelectClient={selectClientModal}
+                        data={modalClients}
+                        handleSelectData={selectClientModal}
                         clearSelectedRows={toggledClearRows}
-                        submitBorrow={submitNewBorrow}
+                        submitData={submitNewBorrow}
                     />
                 </div>
                 }
